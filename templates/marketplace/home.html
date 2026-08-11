@@ -4,9 +4,9 @@
 <section class="hero section-pad" aria-labelledby="hero-title" id="home">
   <div class="hero-copy">
     <p class="eyebrow">Medical tourism facilitator for India</p>
-    <h1 id="hero-title">Compare hospitals, doctors, and treatment plans with a FlyCure coordinator.</h1>
+    <h1 id="hero-title"><span class="brand-word">FlyCure</span> helps you compare hospitals, doctors, and treatment plans in India.</h1>
     <p class="hero-subtitle">
-      FlyCure helps international patients review allopathic treatment options in India, shortlist realistic hospital choices, and receive quotations privately on WhatsApp.
+      Review allopathic options, shortlist realistic hospital choices, and receive quotations privately on WhatsApp with a dedicated coordinator.
     </p>
     <div class="hero-actions">
       <a
@@ -15,11 +15,13 @@
         target="_blank"
         rel="noreferrer"
       >
-        <span class="btn-icon" aria-hidden="true">></span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M8 10h8M8 14h5" stroke-linecap="round"/>
+          <path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-3.3A8.5 8.5 0 1 1 21 12Z" stroke-linejoin="round"/>
+        </svg>
         Chat on WhatsApp
       </a>
       <a class="btn btn-secondary" href="#treatments">
-        <span class="btn-icon" aria-hidden="true">?</span>
         Explore treatments
       </a>
       {% if user.is_authenticated %}
@@ -115,12 +117,18 @@
   <div class="treatment-grid">
     {% for specialty in specialties %}
       <article class="treatment-card" data-specialty="{{ specialty.short_code }}">
-        <span class="card-icon">{{ specialty.icon }}</span>
+        <span class="card-icon" aria-hidden="true">
+          <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 4v16M4 12h16" stroke-linecap="round"/>
+          </svg>
+        </span>
         <h3>{{ specialty.name }}</h3>
         <p>{{ specialty.description }}</p>
       </article>
     {% empty %}
-      <p>No specialties loaded yet. Run <code>python manage.py seed_marketplace</code>.</p>
+      <div class="empty-state">
+        <p>No specialties loaded yet. Run <code>python manage.py seed_marketplace</code>.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
@@ -159,7 +167,9 @@
         </div>
       </article>
     {% empty %}
-      <p>No hospitals match these filters.</p>
+      <div class="empty-state">
+        <p>No hospitals match these filters. Try another specialty or city, or <a href="{% url 'marketplace:home' %}">reset search</a>.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
@@ -188,7 +198,9 @@
         </a>
       </article>
     {% empty %}
-      <p>No doctors match these filters.</p>
+      <div class="empty-state">
+        <p>No doctors match these filters. Try another specialty or city, or <a href="{% url 'marketplace:home' %}">reset search</a>.</p>
+      </div>
     {% endfor %}
   </div>
 </section>

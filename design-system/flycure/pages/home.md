@@ -1,21 +1,18 @@
-# Home page overrides — FlyCure
+# Home page overrides — FlyCure Med-Tech
 
-> Overrides `MASTER.md` for the marketplace homepage only.
-
-## Goals
-- Marketplace / Directory pattern: search is a primary CTA
-- Brand-first hero: **FlyCure** must read as the hero-level signal
-- Accessible & Ethical style with Figtree + Noto Sans
-- Keep WhatsApp conversion path prominent without neon / purple AI gradients
+## Atmosphere
+- Full-bleed dark clinical hero with hospital imagery + soft cyan diagnostic overlay
+- Brand **FlyCure** is the hero-level signal in Space Grotesk
+- Search band reads like a command console / triage panel
 
 ## Section order
-1. Hero (brand + one headline + short support + CTA group + visual)
-2. Search band
-3. Treatment categories
-4. Featured hospitals / doctors / packages
-5. Patient journey
-6. Final coordinator CTA
+1. Hero (brand + headline + CTA + visual plane)
+2. Search console
+3. Treatment grid (HUD cards)
+4. Hospitals / doctors / packages
+5. Journey timeline
+6. Final CTA
 
 ## Motion
-- Subtle reveal-up on listing cards (150–420ms)
-- Respect `prefers-reduced-motion`
+- Staggered reveal on cards
+- Respect prefers-reduced-motion

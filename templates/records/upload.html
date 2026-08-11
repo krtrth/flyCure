@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Upload report | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad auth-section">
+  <div class="auth-card wide">
+    <p class="eyebrow">Private upload</p>
+    <h1>Upload a medical report</h1>
+    <p>PDF, images, or scanned prescriptions. Files are tied to your patient account and not shown publicly.</p>
+    <form method="post" enctype="multipart/form-data" class="auth-form">
+      {% csrf_token %}
+      {% for field in form %}
+        <label>
+          {{ field.label }}
+          {{ field }}
+          {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+        </label>
+      {% endfor %}
+      <button class="btn btn-primary full-width" type="submit">Upload and explain</button>
+    </form>
+    <p class="auth-switch"><a href="{% url 'records:dashboard' %}">Back to my records</a></p>
+  </div>
+</section>
+{% endblock %}

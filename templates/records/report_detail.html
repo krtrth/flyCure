@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ report.title }} | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad">
+  <div class="section-heading align-left">
+    <p class="eyebrow">{{ report.get_status_display }} · {{ report.uploaded_at|date:"M j, Y H:i" }}</p>
+    <h1>{{ report.title }}</h1>
+    <p>
+      {% if report.treatment_need %}Treatment need: {{ report.treatment_need }}. {% endif %}
+      {{ report.description }}
+    </p>
+  </div>
+
+  <div class="hero-actions" style="margin-bottom: 2rem;">
+    <a class="btn btn-secondary" href="{{ report.file.url }}" target="_blank" rel="noreferrer">Download file</a>
+    <form method="post" action="{% url 'records:request_explanation' report.pk %}">
+      {% csrf_token %}
+      <button class="btn btn-primary" type="submit">Regenerate AI explanation</button>
+    </form>
+    <a class="btn btn-secondary" href="{% url 'records:dashboard' %}">Back to records</a>
+  </div>
+
+  <article class="explanation-panel">
+    <h2>AI explanation</h2>
+    {% if report.explanation and report.explanation.status == "complete" %}
+      <p class="card-meta">Model: {{ report.explanation.model_name }}</p>
+      <h3>Summary</h3>
+      <p>{{ report.explanation.summary }}</p>
+      <h3>Key findings</h3>
+      <pre class="findings">{{ report.explanation.key_findings }}</pre>
+      <h3>Patient-friendly notes</h3>
+      <p>{{ report.explanation.patient_friendly_notes }}</p>
+      <p class="disclaimer">{{ report.explanation.disclaimer }}</p>
+    {% elif report.explanation and report.explanation.status == "failed" %}
+      <p class="field-error">Explanation failed: {{ report.explanation.error_message }}</p>
+    {% else %}
+      <p>Explanation is still pending. Use regenerate if needed.</p>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}

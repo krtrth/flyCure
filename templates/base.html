@@ -1,0 +1,77 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="FlyCure helps international patients compare allopathic hospitals, doctors, and treatment packages in India with WhatsApp-first care coordination."
+    />
+    <title>{% block title %}FlyCure | Compare Treatment Options in India{% endblock %}</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body data-whatsapp="{{ WHATSAPP_NUMBER }}">
+    <header class="site-header">
+      <a class="brand" href="{% url 'marketplace:home' %}" aria-label="FlyCure home">
+        <span class="brand-mark">F</span>
+        <span>FlyCure</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="{% url 'marketplace:home' %}#treatments">Treatments</a>
+        <a href="{% url 'marketplace:hospitals' %}">Hospitals</a>
+        <a href="{% url 'marketplace:doctors' %}">Doctors</a>
+        <a href="{% url 'marketplace:home' %}#packages">Packages</a>
+        <a href="{% url 'marketplace:home' %}#journey">Journey</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'records:dashboard' %}">My records</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}">Patient login</a>
+        {% endif %}
+      </nav>
+      <a
+        class="header-cta"
+        href="https://wa.me/{{ WHATSAPP_NUMBER }}?text=Hi%20FlyCure%2C%20I%20want%20help%20comparing%20treatment%20options%20in%20India."
+        target="_blank"
+        rel="noreferrer"
+      >
+        WhatsApp
+      </a>
+    </header>
+
+    {% if messages %}
+      <div class="messages-band" role="status">
+        {% for message in messages %}
+          <p class="flash flash-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <a class="brand footer-brand" href="{% url 'marketplace:home' %}" aria-label="FlyCure home">
+          <span class="brand-mark">F</span>
+          <span>FlyCure</span>
+        </a>
+        <p>Medical tourism marketplace for international patients coming to India.</p>
+      </div>
+      <p class="footer-note">
+        Sample providers may be fictional in early demos. Medical decisions and quotations require doctor review.
+      </p>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

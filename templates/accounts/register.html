@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Create patient account | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad auth-section">
+  <div class="auth-card">
+    <p class="eyebrow">Patient access</p>
+    <h1>Create your FlyCure account</h1>
+    <p>Upload medical reports privately and request AI draft explanations before coordinator review.</p>
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-errors">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+        <label>
+          {{ field.label }}
+          {{ field }}
+          {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+          {% if field.help_text %}<small class="help">{{ field.help_text|safe }}</small>{% endif %}
+        </label>
+      {% endfor %}
+      <button class="btn btn-primary full-width" type="submit">Create account</button>
+    </form>
+    <p class="auth-switch">Already registered? <a href="{% url 'accounts:login' %}">Log in</a></p>
+  </div>
+</section>
+{% endblock %}

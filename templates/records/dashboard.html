@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}My records | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad">
+  <div class="section-heading align-left">
+    <p class="eyebrow">Patient records</p>
+    <h1>Hello{% if user.first_name %}, {{ user.first_name }}{% endif %}</h1>
+    <p>Your uploaded medical reports stay private on your account. AI explanations are drafts for discussion with a doctor.</p>
+  </div>
+
+  <div class="hero-actions" style="margin-bottom: 2rem;">
+    <a class="btn btn-primary" href="{% url 'records:upload' %}">Upload a report</a>
+    <a class="btn btn-secondary" href="{% url 'marketplace:hospitals' %}">Search hospitals</a>
+    <a class="btn btn-secondary" href="{% url 'marketplace:doctors' %}">Search doctors</a>
+    <form method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button class="btn btn-secondary" type="submit">Log out</button>
+    </form>
+  </div>
+
+  <div class="records-list">
+    {% for report in reports %}
+      <article class="record-card">
+        <div>
+          <p class="card-meta">{{ report.uploaded_at|date:"M j, Y H:i" }} · {{ report.get_status_display }}</p>
+          <h2><a href="{% url 'records:report_detail' report.pk %}">{{ report.title }}</a></h2>
+          <p>{% if report.treatment_need %}Need: {{ report.treatment_need }} · {% endif %}{{ report.description|default:"No notes added." }}</p>
+        </div>
+        <a class="btn btn-small" href="{% url 'records:report_detail' report.pk %}">Open</a>
+      </article>
+    {% empty %}
+      <p>No reports yet. Upload your first medical file to get a draft AI explanation.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

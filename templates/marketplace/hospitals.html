@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Hospitals | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad">
+  <div class="section-heading align-left">
+    <p class="eyebrow">Hospital search</p>
+    <h1>Search hospitals in India</h1>
+    <p>Filter by specialty and city, then request a WhatsApp quotation.</p>
+  </div>
+
+  <form class="search-grid" method="get">
+    <label>
+      Search
+      <input name="q" type="search" value="{{ filters.q }}" placeholder="Hospital name or city" />
+    </label>
+    <label>
+      Specialty
+      <select name="specialty">
+        <option value="all">All specialties</option>
+        {% for specialty in all_specialties %}
+          <option value="{{ specialty.short_code }}" {% if filters.specialty == specialty.short_code %}selected{% endif %}>
+            {{ specialty.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      City
+      <select name="city">
+        <option value="all">All cities</option>
+        {% for city in cities %}
+          <option value="{{ city }}" {% if filters.city == city %}selected{% endif %}>{{ city }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="btn btn-dark" type="submit">Search</button>
+  </form>
+
+  <div class="hospital-list" style="margin-top: 2rem;">
+    {% for hospital in hospitals %}
+      <article class="provider-card">
+        {% if hospital.image_url %}
+          <img src="{{ hospital.image_url }}" alt="{{ hospital.name }}" />
+        {% endif %}
+        <div>
+          <div class="card-meta">{{ hospital.city }} · {{ hospital.accreditation }}</div>
+          <h3><a href="{% url 'marketplace:hospital_detail' hospital.slug %}">{{ hospital.name }}</a></h3>
+          <p>{{ hospital.summary }}</p>
+          <a class="text-link" href="{% url 'marketplace:hospital_detail' hospital.slug %}">View hospital</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>No hospitals found.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

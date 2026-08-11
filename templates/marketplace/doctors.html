@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Doctors | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad">
+  <div class="section-heading align-left">
+    <p class="eyebrow">Doctor search</p>
+    <h1>Search doctors</h1>
+    <p>Compare specialists by specialty, city, and hospital affiliation.</p>
+  </div>
+
+  <form class="search-grid" method="get">
+    <label>
+      Search
+      <input name="q" type="search" value="{{ filters.q }}" placeholder="Doctor name or specialty" />
+    </label>
+    <label>
+      Specialty
+      <select name="specialty">
+        <option value="all">All specialties</option>
+        {% for specialty in all_specialties %}
+          <option value="{{ specialty.short_code }}" {% if filters.specialty == specialty.short_code %}selected{% endif %}>
+            {{ specialty.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      City
+      <select name="city">
+        <option value="all">All cities</option>
+        {% for city in cities %}
+          {% if city %}
+            <option value="{{ city }}" {% if filters.city == city %}selected{% endif %}>{{ city }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </label>
+    <button class="btn btn-dark" type="submit">Search</button>
+  </form>
+
+  <div class="doctor-grid" style="margin-top: 2rem;">
+    {% for doctor in doctors %}
+      <article class="doctor-card">
+        <div class="doctor-avatar">{{ doctor.initials }}</div>
+        <p class="card-meta">{{ doctor.title }} · {{ doctor.city }}</p>
+        <h3><a href="{% url 'marketplace:doctor_detail' doctor.slug %}">{{ doctor.name }}</a></h3>
+        <p>{{ doctor.years_experience }} years · {{ doctor.bio }}</p>
+        <span>{{ doctor.languages }}</span>
+      </article>
+    {% empty %}
+      <p>No doctors found.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

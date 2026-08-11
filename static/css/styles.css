@@ -742,3 +742,126 @@ select {
     padding: 20px;
   }
 }
+
+/* Auth + patient records */
+.messages-band {
+  max-width: 1100px;
+  margin: 12px auto 0;
+  padding-inline: 24px;
+}
+
+.flash {
+  margin: 0 0 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--mint);
+  color: var(--green);
+}
+
+.auth-section {
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(100%, 480px);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.auth-card.wide {
+  width: min(100%, 640px);
+}
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.auth-form label,
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  display: block;
+  width: 100%;
+}
+
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.auth-switch {
+  margin-top: 18px;
+  color: var(--muted);
+}
+
+.auth-switch a,
+.record-card a,
+.explanation-panel a {
+  color: var(--teal);
+  text-decoration: underline;
+}
+
+.form-errors,
+.field-error {
+  color: #9b1c1c;
+  font-size: 0.92rem;
+}
+
+.help {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.records-list {
+  display: grid;
+  gap: 14px;
+}
+
+.record-card,
+.explanation-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+}
+
+.explanation-panel {
+  display: block;
+  max-width: 860px;
+}
+
+.explanation-panel .findings {
+  white-space: pre-wrap;
+  font-family: inherit;
+  background: var(--sky);
+  padding: 14px;
+  border-radius: 12px;
+}
+
+.disclaimer {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.auth-section .hero-actions,
+.section-pad .hero-actions form {
+  display: inline-flex;
+}

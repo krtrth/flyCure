@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ hospital.name }} | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad">
+  <div class="section-heading align-left">
+    <p class="eyebrow">{{ hospital.city }} · {{ hospital.accreditation }}</p>
+    <h1>{{ hospital.name }}</h1>
+    <p>{{ hospital.summary }}</p>
+  </div>
+
+  {% if hospital.image_url %}
+    <div class="panel-image" style="max-width: 720px; margin-bottom: 2rem;">
+      <img src="{{ hospital.image_url }}" alt="{{ hospital.name }}" />
+    </div>
+  {% endif %}
+
+  <div class="tags" style="margin-bottom: 2rem;">
+    {% for specialty in hospital.specialties.all %}
+      <span>{{ specialty.name }}</span>
+    {% endfor %}
+    {% for tag in hospital.tag_list %}
+      <span>{{ tag }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="hero-actions" style="margin-bottom: 3rem;">
+    <a
+      class="btn btn-primary"
+      href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, I want a quote from '|urlencode }}{{ hospital.name|urlencode }}."
+      target="_blank"
+      rel="noreferrer"
+    >
+      Request WhatsApp quote
+    </a>
+    <a class="btn btn-secondary" href="{% url 'records:upload' %}">Upload reports for review</a>
+  </div>
+
+  <h2>Doctors</h2>
+  <div class="doctor-grid" style="margin: 1.5rem 0 3rem;">
+    {% for doctor in hospital.doctors.all %}
+      <article class="doctor-card">
+        <div class="doctor-avatar">{{ doctor.initials }}</div>
+        <h3><a href="{% url 'marketplace:doctor_detail' doctor.slug %}">{{ doctor.name }}</a></h3>
+        <p>{{ doctor.title }} · {{ doctor.years_experience }} years</p>
+        <p>{{ doctor.bio }}</p>
+      </article>
+    {% empty %}
+      <p>No doctors listed yet.</p>
+    {% endfor %}
+  </div>
+
+  <h2>Packages</h2>
+  <div class="package-table" style="margin-top: 1.5rem;">
+    <div class="package-row table-head" role="row">
+      <span>Package</span>
+      <span>Typical stay</span>
+      <span>Quote</span>
+    </div>
+    {% for package in hospital.packages.all %}
+      <div class="package-row" role="row">
+        <span>{{ package.name }}</span>
+        <span>{{ package.typical_stay }}</span>
+        <a href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, quote for '|urlencode }}{{ package.name|urlencode }}." target="_blank" rel="noreferrer">
+          WhatsApp quote
+        </a>
+      </div>
+    {% empty %}
+      <p>No packages listed yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

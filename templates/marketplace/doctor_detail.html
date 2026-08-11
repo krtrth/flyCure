@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ doctor.name }} | FlyCure{% endblock %}
+
+{% block content %}
+<section class="section-pad">
+  <div class="section-heading align-left">
+    <p class="eyebrow">{{ doctor.title }} · {{ doctor.city }}</p>
+    <h1>{{ doctor.name }}</h1>
+    <p>{{ doctor.years_experience }} years experience · {{ doctor.languages }}</p>
+  </div>
+
+  <div class="doctor-card" style="max-width: 420px; margin-bottom: 2rem;">
+    <div class="doctor-avatar">{{ doctor.initials }}</div>
+    <p>{{ doctor.bio }}</p>
+    {% if doctor.hospital %}
+      <p class="card-meta">
+        Affiliated with
+        <a href="{% url 'marketplace:hospital_detail' doctor.hospital.slug %}">{{ doctor.hospital.name }}</a>
+      </p>
+    {% endif %}
+    {% if doctor.specialty %}
+      <p class="card-meta">Specialty: {{ doctor.specialty.name }}</p>
+    {% endif %}
+  </div>
+
+  <div class="hero-actions">
+    <a
+      class="btn btn-primary"
+      href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, please check availability for '|urlencode }}{{ doctor.name|urlencode }}."
+      target="_blank"
+      rel="noreferrer"
+    >
+      Check availability on WhatsApp
+    </a>
+    <a class="btn btn-secondary" href="{% url 'records:upload' %}">Upload reports</a>
+  </div>
+</section>
+{% endblock %}

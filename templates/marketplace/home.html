@@ -3,10 +3,10 @@
 {% block content %}
 <section class="hero section-pad" aria-labelledby="hero-title" id="home">
   <div class="hero-copy">
-    <p class="eyebrow">Medical tourism facilitator for India</p>
-    <h1 id="hero-title">Compare hospitals, doctors, and treatment plans with a FlyCure coordinator.</h1>
+    <p class="eyebrow">Clinical care network · India</p>
+    <h1 id="hero-title"><span class="brand-word">FlyCure</span> connects you to next-gen hospital care with precision matching.</h1>
     <p class="hero-subtitle">
-      FlyCure helps international patients review allopathic treatment options in India, shortlist realistic hospital choices, and receive quotations privately on WhatsApp.
+      Compare accredited hospitals and specialists, upload reports for private AI draft review, and receive WhatsApp quotations from a dedicated coordinator.
     </p>
     <div class="hero-actions">
       <a
@@ -15,11 +15,13 @@
         target="_blank"
         rel="noreferrer"
       >
-        <span class="btn-icon" aria-hidden="true">></span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M8 10h8M8 14h5" stroke-linecap="round"/>
+          <path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-3.3A8.5 8.5 0 1 1 21 12Z" stroke-linejoin="round"/>
+        </svg>
         Chat on WhatsApp
       </a>
       <a class="btn btn-secondary" href="#treatments">
-        <span class="btn-icon" aria-hidden="true">?</span>
         Explore treatments
       </a>
       {% if user.is_authenticated %}
@@ -29,10 +31,10 @@
       {% endif %}
     </div>
     <div class="trust-strip" aria-label="FlyCure trust signals">
-      <span>Verified sample network</span>
-      <span>24h plan review</span>
+      <span>Verified partner network</span>
+      <span>Encrypted report vault</span>
+      <span>24h clinical triage</span>
       <span>Medical visa guidance</span>
-      <span>Private report handling</span>
     </div>
   </div>
   <aside class="hero-panel" aria-label="WhatsApp treatment plan panel">
@@ -43,8 +45,8 @@
       />
     </div>
     <div class="quick-plan">
-      <p class="panel-kicker">Start with one message</p>
-      <h2>Get 2-3 suitable options after report review.</h2>
+      <p class="panel-kicker">Care console</p>
+      <h2>Transmit needs. Receive 2–3 hospital-ready options.</h2>
       <form class="mini-form" aria-label="Treatment preference form">
         <label>
           Treatment need
@@ -106,8 +108,8 @@
 
 <section class="section-pad" id="treatments" aria-labelledby="treatments-title">
   <div class="section-heading">
-    <p class="eyebrow">Allopathic specialties</p>
-    <h2 id="treatments-title">Treatment categories FlyCure can coordinate</h2>
+    <p class="eyebrow">Specialty matrix</p>
+    <h2 id="treatments-title">Treatment pathways FlyCure can orchestrate</h2>
     <p>
       Every category leads to a doctor review first. Final recommendations and quotations are shared on WhatsApp after medical reports are assessed.
     </p>
@@ -115,20 +117,26 @@
   <div class="treatment-grid">
     {% for specialty in specialties %}
       <article class="treatment-card" data-specialty="{{ specialty.short_code }}">
-        <span class="card-icon">{{ specialty.icon }}</span>
+        <span class="card-icon" aria-hidden="true">
+          <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 4v16M4 12h16" stroke-linecap="round"/>
+          </svg>
+        </span>
         <h3>{{ specialty.name }}</h3>
         <p>{{ specialty.description }}</p>
       </article>
     {% empty %}
-      <p>No specialties loaded yet. Run <code>python manage.py seed_marketplace</code>.</p>
+      <div class="empty-state">
+        <p>No specialties loaded yet. Run <code>python manage.py seed_marketplace</code>.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
 
 <section class="section-pad split-section" id="hospitals" aria-labelledby="hospitals-title">
   <div class="section-heading align-left">
-    <p class="eyebrow">Sample marketplace</p>
-    <h2 id="hospitals-title">Compare realistic hospital options before you travel</h2>
+    <p class="eyebrow">Hospital intelligence</p>
+    <h2 id="hospitals-title">Scan hospital options before you travel</h2>
     <p>
       Browse partner and sample hospital profiles. Request a private WhatsApp quotation after report review.
     </p>
@@ -159,7 +167,9 @@
         </div>
       </article>
     {% empty %}
-      <p>No hospitals match these filters.</p>
+      <div class="empty-state">
+        <p>No hospitals match these filters. Try another specialty or city, or <a href="{% url 'marketplace:home' %}">reset search</a>.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
@@ -188,7 +198,9 @@
         </a>
       </article>
     {% empty %}
-      <p>No doctors match these filters.</p>
+      <div class="empty-state">
+        <p>No doctors match these filters. Try another specialty or city, or <a href="{% url 'marketplace:home' %}">reset search</a>.</p>
+      </div>
     {% endfor %}
   </div>
 </section>
@@ -242,8 +254,8 @@
 
 <section class="section-pad journey-section" id="journey" aria-labelledby="journey-title">
   <div class="section-heading">
-    <p class="eyebrow">Patient journey</p>
-    <h2 id="journey-title">From first message to follow-up</h2>
+    <p class="eyebrow">Care sequence</p>
+    <h2 id="journey-title">From first signal to recovery follow-up</h2>
   </div>
   <div class="journey-grid">
     <article><span>01</span><h3>Send reports</h3><p>Create an account, upload diagnosis files, and keep them private.</p></article>

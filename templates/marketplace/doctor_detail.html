@@ -4,36 +4,44 @@
 
 {% block content %}
 <section class="section-pad">
-  <div class="section-heading align-left">
-    <p class="eyebrow">{{ doctor.title }} · {{ doctor.city }}</p>
-    <h1>{{ doctor.name }}</h1>
-    <p>{{ doctor.years_experience }} years experience · {{ doctor.languages }}</p>
-  </div>
+  <div class="detail-spread">
+    <div class="detail-body">
+      <p class="eyebrow">{{ doctor.title }} · {{ doctor.city }}</p>
+      <h1>{{ doctor.name }}</h1>
+      <p class="detail-lede">{{ doctor.years_experience }} years of practice · {{ doctor.languages }}</p>
 
-  <div class="doctor-card" style="max-width: 420px; margin-bottom: 2rem;">
-    <div class="doctor-avatar">{{ doctor.initials }}</div>
-    <p>{{ doctor.bio }}</p>
-    {% if doctor.hospital %}
-      <p class="card-meta">
-        Affiliated with
-        <a href="{% url 'marketplace:hospital_detail' doctor.hospital.slug %}">{{ doctor.hospital.name }}</a>
-      </p>
-    {% endif %}
-    {% if doctor.specialty %}
-      <p class="card-meta">Specialty: {{ doctor.specialty.name }}</p>
-    {% endif %}
-  </div>
+      <div class="doctor-card" style="max-width: 520px; margin: 2rem 0;">
+        <div class="doctor-avatar">{{ doctor.initials }}</div>
+        <p>{{ doctor.bio }}</p>
+        {% if doctor.hospital %}
+          <p class="card-meta">
+            Affiliated with
+            <a href="{% url 'marketplace:hospital_detail' doctor.hospital.slug %}">{{ doctor.hospital.name }}</a>
+          </p>
+        {% endif %}
+        {% if doctor.specialty %}
+          <p class="card-meta">Specialty: {{ doctor.specialty.name }}</p>
+        {% endif %}
+      </div>
+    </div>
 
-  <div class="hero-actions">
-    <a
-      class="btn btn-primary"
-      href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, please check availability for '|urlencode }}{{ doctor.name|urlencode }}."
-      target="_blank"
-      rel="noreferrer"
-    >
-      Check availability on WhatsApp
-    </a>
-    <a class="btn btn-secondary" href="{% url 'records:upload' %}">Upload reports</a>
+    <aside class="detail-cta">
+      <p class="eyebrow">Availability</p>
+      <h2>Ask a coordinator</h2>
+      <p>We confirm consulting slots and video consult options privately on WhatsApp.</p>
+      <div class="hero-actions" style="margin-top: 0;">
+        <a
+          class="btn btn-primary full-width"
+          href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, please check availability for '|urlencode }}{{ doctor.name|urlencode }}."
+          target="_blank"
+          rel="noreferrer"
+        >
+          Check on WhatsApp
+        </a>
+        <a class="btn btn-secondary full-width" href="{% url 'care:appointment_request' doctor.slug %}">Request a slot on-site</a>
+        <a class="btn btn-secondary full-width" href="{% url 'records:upload' %}">Upload reports</a>
+      </div>
+    </aside>
   </div>
 </section>
 {% endblock %}

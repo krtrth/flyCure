@@ -1,0 +1,16 @@
+<p class="portal-sidebar-kicker">Patient desk</p>
+<p class="portal-sidebar-name">{{ user.get_full_name|default:user.username }}</p>
+<nav class="portal-nav">
+  <a href="{% url 'records:dashboard' %}" class="{% if active == 'overview' %}is-active{% endif %}">Overview</a>
+  <a href="{% url 'records:dashboard' %}#appointments" class="{% if active == 'appointments' %}is-active{% endif %}">Appointments</a>
+  <a href="{% url 'records:dashboard' %}#prescriptions" class="{% if active == 'prescriptions' %}is-active{% endif %}">Prescriptions</a>
+  <a href="{% url 'records:dashboard' %}#tests" class="{% if active == 'tests' %}is-active{% endif %}">Suggested tests</a>
+  <a href="{% url 'records:dashboard' %}#history" class="{% if active == 'history' %}is-active{% endif %}">Medical history</a>
+  <a href="{% url 'records:upload' %}" class="{% if active == 'upload' %}is-active{% endif %}">Upload prescription</a>
+  <a href="{% url 'accounts:profile' %}" class="{% if active == 'profile' %}is-active{% endif %}">Profile</a>
+  <a href="{% url 'marketplace:doctors' %}">Find a doctor</a>
+</nav>
+<form method="post" action="{% url 'accounts:logout' %}" class="portal-logout">
+  {% csrf_token %}
+  <button type="submit">Log out</button>
+</form>

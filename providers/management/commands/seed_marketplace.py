@@ -1,6 +1,12 @@
+from datetime import date, timedelta
+
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 from django.utils.text import slugify
 
+from accounts.models import PatientProfile
+from care.models import AvailabilitySlot
 from providers.models import Doctor, Hospital, Specialty, TreatmentPackage
 
 
@@ -21,12 +27,39 @@ SPECIALTIES = [
 
 
 class Command(BaseCommand):
-    help = "Seed sample specialties, hospitals, doctors, and packages for FlyCure."
+    help = (
+        "Seed sample marketplace data once. Existing hospitals/doctors are left alone "
+        "so admin edits are not overwritten on Docker restart. Use --force to reload catalog rows."
+    )
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--force",
+            action="store_true",
+            help="Recreate sample catalog rows (overwrites matching slugs).",
+        )
 
     def handle(self, *args, **options):
+        force = options["force"]
+        specialty_map = self._seed_specialties()
+        catalog_exists = Hospital.objects.exists() and Doctor.objects.exists()
+
+        if catalog_exists and not force:
+            self.stdout.write("Marketplace catalog already exists; skipping sample hospitals/doctors/packages.")
+        else:
+            self._seed_catalog(specialty_map)
+
+        self._ensure_demo_accounts()
+        self.stdout.write(self.style.SUCCESS("Demo logins (username / password):"))
+        self.stdout.write("  patient / patient   — patient records")
+        self.stdout.write("  doctor / doctor     — doctor desk")
+        self.stdout.write("  hospital / hospital — hospital desk")
+        self.stdout.write("  admin / admin       — Django admin")
+
+    def _seed_specialties(self):
         specialty_map = {}
         for name, code, icon, description in SPECIALTIES:
-            specialty, _ = Specialty.objects.update_or_create(
+            specialty, _ = Specialty.objects.get_or_create(
                 slug=slugify(name),
                 defaults={
                     "name": name,
@@ -37,7 +70,9 @@ class Command(BaseCommand):
                 },
             )
             specialty_map[code] = specialty
+        return specialty_map
 
+    def _seed_catalog(self, specialty_map):
         hospitals_data = [
             {
                 "name": "Asteria Heart & Multi-Specialty Institute",
@@ -83,7 +118,7 @@ class Command(BaseCommand):
 
         hospital_map = {}
         for item in hospitals_data:
-            hospital, _ = Hospital.objects.update_or_create(
+            hospital, created = Hospital.objects.get_or_create(
                 slug=slugify(item["name"]),
                 defaults={
                     "name": item["name"],
@@ -97,7 +132,8 @@ class Command(BaseCommand):
                     "is_active": True,
                 },
             )
-            hospital.specialties.set([specialty_map[code] for code in item["specialty_codes"]])
+            if created:
+                hospital.specialties.set([specialty_map[code] for code in item["specialty_codes"]])
             hospital_map[item["name"]] = hospital
 
         doctors_data = [
@@ -137,7 +173,7 @@ class Command(BaseCommand):
         ]
 
         for item in doctors_data:
-            Doctor.objects.update_or_create(
+            Doctor.objects.get_or_create(
                 slug=slugify(item["name"]),
                 defaults={
                     "name": item["name"],
@@ -155,24 +191,106 @@ class Command(BaseCommand):
             )
 
         packages_data = [
-            ("CABG surgery plan", "Asteria Heart & Multi-Specialty Institute", "cardiac", "4-6 hospital days"),
-            ("Dental implant plan", "NovaDent Global Care", "dental", "OPD visits"),
-            ("IVF cycle plan", "BloomBridge Fertility & Women's Health", "fertility", "OPD pathway"),
-            ("Knee replacement plan", "Meridian Ortho MedCity", "ortho", "5-7 hospital days"),
+            ("CABG surgery plan", "Asteria Heart & Multi-Specialty Institute", "cardiac", "4-6 hospital days", 9000, 14000),
+            ("Dental implant plan", "NovaDent Global Care", "dental", "OPD visits", 1200, 2800),
+            ("IVF cycle plan", "BloomBridge Fertility & Women's Health", "fertility", "OPD pathway", 3500, 5500),
+            ("Knee replacement plan", "Meridian Ortho MedCity", "ortho", "5-7 hospital days", 6000, 9500),
         ]
 
-        for name, hospital_name, specialty_code, stay in packages_data:
-            TreatmentPackage.objects.update_or_create(
+        for name, hospital_name, specialty_code, stay, cost_from, cost_to in packages_data:
+            TreatmentPackage.objects.get_or_create(
                 slug=slugify(name),
                 defaults={
                     "name": name,
                     "hospital": hospital_map[hospital_name],
                     "specialty": specialty_map[specialty_code],
                     "typical_stay": stay,
+                    "approx_cost_from": cost_from,
+                    "approx_cost_to": cost_to,
+                    "approx_cost_currency": "USD",
                     "includes": "Doctor consultation, procedure estimate, standard hospital stay, routine diagnostics, airport pickup, interpreter support, coordinator assistance.",
                     "excludes": "Complications, extended stay, donor-related costs, premium rooms, international flights, personal expenses, major plan changes after arrival.",
                     "is_active": True,
                 },
             )
 
-        self.stdout.write(self.style.SUCCESS("Seeded FlyCure sample marketplace data."))
+        asteria = hospital_map["Asteria Heart & Multi-Specialty Institute"]
+        if not asteria.features:
+            asteria.features = "International desk, ICU, Arabic interpreter, airport pickup desk."
+            asteria.save(update_fields=["features"])
+
+        self.stdout.write("Inserted sample marketplace catalog.")
+
+    def _ensure_demo_accounts(self):
+        patient_user, created = User.objects.get_or_create(
+            username="patient",
+            defaults={
+                "first_name": "Amina",
+                "last_name": "Hassan",
+                "email": "patient@flycure.local",
+            },
+        )
+        if created:
+            patient_user.set_password("patient")
+            patient_user.save()
+        PatientProfile.objects.get_or_create(
+            user=patient_user,
+            defaults={
+                "country": "Kenya",
+                "mobile": "254700000000",
+                "phone_whatsapp": "254700000000",
+                "preferred_language": "English",
+                "date_of_birth": date(1990, 3, 12),
+                "gender": PatientProfile.Gender.FEMALE,
+                "height_cm": 164,
+                "weight_kg": 62,
+            },
+        )
+
+        doctor_user, created = User.objects.get_or_create(
+            username="doctor",
+            defaults={
+                "first_name": "Demo",
+                "last_name": "Doctor",
+                "email": "doctor@flycure.local",
+            },
+        )
+        if created:
+            doctor_user.set_password("doctor")
+            doctor_user.save()
+        if not Doctor.objects.filter(user=doctor_user).exists():
+            target = Doctor.objects.filter(user__isnull=True).order_by("id").first()
+            if target:
+                target.user = doctor_user
+                target.save(update_fields=["user"])
+                self.stdout.write(f"Linked doctor login to {target.name}.")
+            else:
+                self.stdout.write(self.style.WARNING("No unlinked doctor found for the doctor login."))
+        linked_doctor = Doctor.objects.filter(user=doctor_user).first()
+        if linked_doctor and not AvailabilitySlot.objects.filter(doctor=linked_doctor).exists():
+            start = timezone.now().replace(minute=0, second=0, microsecond=0) + timedelta(days=2)
+            for offset in (0, 3, 6):
+                begins = start + timedelta(hours=offset)
+                AvailabilitySlot.objects.create(
+                    doctor=linked_doctor,
+                    starts_at=begins,
+                    ends_at=begins + timedelta(minutes=45),
+                )
+
+        hospital_user, created = User.objects.get_or_create(
+            username="hospital",
+            defaults={
+                "first_name": "Demo",
+                "last_name": "Hospital",
+                "email": "hospital@flycure.local",
+            },
+        )
+        if created:
+            hospital_user.set_password("hospital")
+            hospital_user.save()
+        if not Hospital.objects.filter(user=hospital_user).exists():
+            target = Hospital.objects.filter(user__isnull=True).order_by("id").first()
+            if target:
+                target.user = hospital_user
+                target.save(update_fields=["user"])
+                self.stdout.write(f"Linked hospital login to {target.name}.")

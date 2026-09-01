@@ -1,0 +1,62 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: flycure
+      MYSQL_USER: flycure
+      MYSQL_PASSWORD: flycure
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - flycure_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: flycure
+      PMA_PASSWORD: flycure
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: flycure
+      MYSQL_USER: flycure
+      MYSQL_PASSWORD: flycure
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0,web
+      DJANGO_CSRF_TRUSTED_ORIGINS: http://localhost:8000,http://127.0.0.1:8000
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: admin@flycure.local
+      DJANGO_SUPERUSER_PASSWORD: admin
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - flycure_media:/app/media
+
+volumes:
+  flycure_mysql_data:
+  flycure_media:

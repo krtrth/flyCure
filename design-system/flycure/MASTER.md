@@ -7,9 +7,9 @@
 ---
 
 **Project:** FlyCure
-**Updated:** 2026-08-11
-**Category:** Futuristic Med-Tech / Hospital Marketplace
-**Direction:** Clinical HUD × Soft UI Evolution (hospital imaging suite aesthetic)
+**Updated:** 2026-09-01
+**Category:** Luxury medical travel / hospital marketplace
+**Direction:** Editorial Clinic (hospital annual report × travel magazine)
 
 ---
 
@@ -19,49 +19,46 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary | `#22D3EE` | `--color-primary` |
-| On Primary | `#041016` | `--color-on-primary` |
-| Secondary | `#38BDF8` | `--color-secondary` |
-| Accent/CTA | `#2DD4BF` | `--color-accent` |
-| Background | `#070B14` | `--color-background` |
-| Foreground | `#E8F4F8` | `--color-foreground` |
-| Muted | `#121A28` | `--color-muted` |
-| Muted FG | `#8BA3B5` | `--color-muted-fg` |
-| Border | `rgba(56, 189, 248, 0.28)` | `--color-border` |
-| Surface / Glass | `rgba(14, 22, 36, 0.78)` | `--color-surface` |
-| Destructive | `#F87171` | `--color-destructive` |
-| Ring | `#22D3EE` | `--color-ring` |
-| Success | `#34D399` | `--color-success` |
+| Primary | `#0F5C5A` | `--color-primary` |
+| On Primary | `#F6F1E8` | `--color-on-primary` |
+| Secondary | `#134E4A` | `--color-secondary` |
+| Accent / brass | `#C4A574` | `--color-accent` |
+| Background | `#F6F1E8` | `--color-background` |
+| Foreground | `#1C1917` | `--color-foreground` |
+| Muted | `#EDE6D9` | `--color-muted` |
+| Muted FG | `#6B645C` | `--color-muted-fg` |
+| Border | `#E0D6C6` | `--color-border` |
+| Surface / paper | `#FFFbf5` | `--color-surface` |
+| Destructive | `#B42318` | `--color-destructive` |
+| Ring | `#0F5C5A` | `--color-ring` |
+| Success | `#3F6F4A` | `--color-success` |
 
-**Color Notes:** Deep hospital night + diagnostic cyan (MRI/OR monitor vibe). No purple. Soft teal CTAs keep it clinical, not cyberpunk.
+**Color Notes:** Warm ivory paper, near-black ink, deep teal CTAs, thin brass rules. No cyan HUD glow, no purple AI gradients.
 
 ### Typography
 
-- **Heading Font:** Space Grotesk
-- **Body Font:** DM Sans
-- **Meta / Data:** JetBrains Mono
-- **Mood:** futuristic med-tech, precise, hospital-grade, innovative
-- **Google Fonts:** https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap
+- **Heading Font:** Fraunces
+- **Body / UI Font:** DM Sans
+- **Mood:** editorial, calm, hospital-grade, travel-luxury
+- **Google Fonts:** https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap
 
 ### Style
 
-**Hybrid:** Soft UI Evolution depth + restrained clinical HUD cues
-
-- Glass panels with hairline cyan borders
-- Subtle grid / radial glow atmosphere (not neon overload)
-- Corner tech markers on featured cards
-- Soft shadows with cyan tint
+- Full-bleed photography with soft scrims
+- Photo-led cards with caption overlays
+- Generous whitespace and thin brass dividers
 - 44×44 touch targets, visible focus rings, reduced-motion support
+- Rounded corners stay modest (`10–16px`)
 
 ### Avoid
 
+- Dark HUD grids, neon glow, glass-cyber panels
 - Purple / pink AI gradients
-- Matrix green cyberpunk / glitch overload
 - Emoji icons
-- Harsh neon text glow on body copy
+- Jargon like “care console”, “specialty matrix”, “transmit needs”
 
 ### Motion
 
-- Reveal-up 350–500ms on listings
+- Reveal-up 400–500ms on listings
 - Soft hover lift 180–240ms
-- Optional slow pulse on status dots only
+- No status-dot pulse

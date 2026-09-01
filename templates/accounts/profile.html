@@ -1,0 +1,32 @@
+{% extends "portal_base.html" %}
+
+{% block title %}My profile | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_patient.html" with active="profile" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="auth-card wide portal-card">
+  <p class="eyebrow">Your file</p>
+  <h1>Medical information</h1>
+  <p>Age is calculated from date of birth. BMI is calculated from height and weight when both are present.</p>
+  {% if object.bmi %}
+    <p class="card-meta">Current BMI: {{ object.bmi }}{% if object.age %} · Age {{ object.age }}{% endif %}</p>
+  {% endif %}
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save profile</button>
+  </form>
+</div>
+{% endblock %}

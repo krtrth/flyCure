@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="portal-shell">
+  <aside class="portal-sidebar" aria-label="Account menu">
+    {% block sidebar %}{% endblock %}
+  </aside>
+  <div class="portal-main">
+    {% block portal_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

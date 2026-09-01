@@ -12,6 +12,7 @@ urlpatterns = [
     path("", include("marketplace.urls")),
     path("accounts/", include("accounts.urls")),
     path("records/", include("records.urls")),
+    path("", include("care.urls")),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,71 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Doctor desk | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_doctor.html" with active="overview" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="section-heading align-left">
+  <p class="eyebrow">Doctor desk</p>
+  <hr class="rule" />
+  <h1>{{ doctor.name }}</h1>
+  <p>Confirm requests, review patients, and publish future availability.</p>
+</div>
+
+<article class="dash-panel" id="requests">
+  <h2>Pending requests</h2>
+  {% for item in requests %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{{ item.patient.get_full_name|default:item.patient.username }}{% if item.slot %} · {{ item.slot.starts_at|date:"M j, Y H:i" }}{% endif %}</p>
+        <p>{{ item.notes|default:"" }}</p>
+      </div>
+      <div class="hero-actions">
+        <form method="post" action="{% url 'care:doctor_appointment_action' item.pk 'confirm' %}">{% csrf_token %}<button class="btn btn-small" type="submit">Confirm</button></form>
+        <form method="post" action="{% url 'care:doctor_appointment_action' item.pk 'decline' %}">{% csrf_token %}<button class="btn btn-small btn-secondary" type="submit">Decline</button></form>
+      </div>
+    </div>
+  {% empty %}
+    <p class="empty-state">No pending slot requests.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="upcoming">
+  <h2>Upcoming confirmed</h2>
+  {% for item in upcoming %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{{ item.patient.get_full_name|default:item.patient.username }} · {{ item.slot.starts_at|date:"M j, Y H:i" }}</p>
+      </div>
+      <form method="post" action="{% url 'care:doctor_appointment_action' item.pk 'complete' %}">{% csrf_token %}<button class="btn btn-small btn-secondary" type="submit">Mark complete</button></form>
+    </div>
+  {% empty %}
+    <p class="empty-state">No upcoming confirmed visits.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="patients">
+  <h2>Past and current patients</h2>
+  {% for person in past_patients %}
+    <p>{{ person.get_full_name|default:person.username }} · {{ person.email }}</p>
+  {% empty %}
+    <p class="empty-state">Patients appear here after a visit is confirmed or completed.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="slots">
+  <h2>Future slots</h2>
+  {% for slot in slots %}
+    <div class="record-card">
+      <div>
+        <p>{{ slot.starts_at|date:"M j, Y H:i" }} – {{ slot.ends_at|date:"H:i" }}{% if slot.is_blocked %} · blocked{% endif %}</p>
+      </div>
+      <form method="post" action="{% url 'care:doctor_slot_delete' slot.pk %}">{% csrf_token %}<button class="btn btn-small btn-secondary" type="submit">Remove</button></form>
+    </div>
+  {% empty %}
+    <p class="empty-state">No future slots. Add times patients can request.</p>
+  {% endfor %}
+</article>
+{% endblock %}

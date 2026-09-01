@@ -1,0 +1,17 @@
+<p class="portal-sidebar-kicker">Hospital desk</p>
+<p class="portal-sidebar-name">{{ user.get_full_name|default:user.username }}</p>
+<nav class="portal-nav">
+  <a href="{% url 'care:hospital_dashboard' %}" class="{% if active == 'overview' %}is-active{% endif %}">Overview</a>
+  <a href="{% url 'care:hospital_dashboard' %}#doctors">Doctors</a>
+  <a href="{% url 'care:hospital_dashboard' %}#packages">Packages</a>
+  <a href="{% url 'care:hospital_dashboard' %}#appointments">Appointments</a>
+  <a href="{% url 'care:hospital_page' %}" class="{% if active == 'page' %}is-active{% endif %}">Edit hospital page</a>
+  <a href="{% url 'care:hospital_package_add' %}" class="{% if active == 'package' %}is-active{% endif %}">Add a package</a>
+  {% if user.linked_hospital %}
+    <a href="{% url 'marketplace:hospital_detail' user.linked_hospital.slug %}">View public page</a>
+  {% endif %}
+</nav>
+<form method="post" action="{% url 'accounts:logout' %}" class="portal-logout">
+  {% csrf_token %}
+  <button type="submit">Log out</button>
+</form>

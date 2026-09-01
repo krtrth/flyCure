@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.db import models
 
+from config.models import SnakeCaseModel
 from records.models import MedicalReport
 
 
-class ReportExplanation(models.Model):
+class ReportExplanation(SnakeCaseModel):
     class Status(models.TextChoices):
         PENDING = "pending", "Pending"
         COMPLETE = "complete", "Complete"

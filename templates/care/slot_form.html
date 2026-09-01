@@ -1,0 +1,28 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Add availability | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_doctor.html" with active="slot" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="auth-card portal-card">
+  <p class="eyebrow">Doctor desk</p>
+  <h1>New availability slot</h1>
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save slot</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.db import models
 
+from config.models import SnakeCaseModel
+
 
 def patient_report_upload_to(instance, filename):
     return f"records/patient_{instance.patient_id}/{filename}"
 
 
-class MedicalReport(models.Model):
+class MedicalReport(SnakeCaseModel):
     class Status(models.TextChoices):
         UPLOADED = "uploaded", "Uploaded"
         PROCESSING = "processing", "AI processing"

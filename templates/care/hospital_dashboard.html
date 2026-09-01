@@ -1,0 +1,55 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Hospital desk | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_hospital.html" with active="overview" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="section-heading align-left">
+  <p class="eyebrow">Hospital desk</p>
+  <hr class="rule" />
+  <h1>{{ hospital.name }}</h1>
+  <p>Update the public page, doctors, approximate packages, and review appointments.</p>
+</div>
+
+<article class="dash-panel" id="doctors">
+  <h2>Doctors</h2>
+  {% for doctor in doctors %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{% if doctor.is_active %}Active{% else %}Hidden{% endif %} · {{ doctor.title }}</p>
+        <h3>{{ doctor.name }}</h3>
+      </div>
+      <a class="btn btn-small btn-secondary" href="{% url 'care:hospital_doctor_edit' doctor.pk %}">Edit</a>
+    </div>
+  {% empty %}
+    <p class="empty-state">No doctors listed.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="packages">
+  <h2>Packages</h2>
+  {% for package in packages %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{{ package.typical_stay }} · {{ package.approx_cost_label|default:"Range not set" }}</p>
+        <h3>{{ package.name }}</h3>
+      </div>
+      <a class="btn btn-small btn-secondary" href="{% url 'care:hospital_package_edit' package.pk %}">Edit</a>
+    </div>
+  {% empty %}
+    <p class="empty-state">No packages yet.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="appointments">
+  <h2>Appointments</h2>
+  {% for item in appointments %}
+    <p class="card-meta">{{ item.get_status_display }} · {{ item.doctor.name }} · {{ item.patient.get_full_name|default:item.patient.username }}{% if item.slot %} · {{ item.slot.starts_at|date:"M j, Y H:i" }}{% endif %}</p>
+  {% empty %}
+    <p class="empty-state">No appointments for this hospital yet.</p>
+  {% endfor %}
+</article>
+{% endblock %}

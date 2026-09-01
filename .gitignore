@@ -24,3 +24,5 @@ staticfiles/
 
 # Local secrets
 local_settings.py
+.cursor/mcp.json
+.cursor/

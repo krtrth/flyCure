@@ -4,10 +4,10 @@
 
 {% block content %}
 <section class="section-pad auth-section">
-  <div class="auth-card">
-    <p class="eyebrow">Patient access</p>
-    <h1>Create your FlyCure account</h1>
-    <p>Upload medical reports privately and request AI draft explanations before coordinator review.</p>
+  <div class="auth-card wide">
+    <p class="eyebrow">Patient desk</p>
+    <h1>Begin your care file</h1>
+    <p>Create a private account to upload reports and receive a plain-language draft before a coordinator reviews them.</p>
     <form method="post" class="auth-form">
       {% csrf_token %}
       {% if form.non_field_errors %}

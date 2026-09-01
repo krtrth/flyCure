@@ -5,8 +5,9 @@
 {% block content %}
 <section class="section-pad">
   <div class="section-heading align-left">
-    <p class="eyebrow">Hospital search</p>
-    <h1>Search hospitals in India</h1>
+    <p class="eyebrow">Directory</p>
+    <hr class="rule" />
+    <h1>Hospitals in India</h1>
     <p>Filter by specialty and city, then request a WhatsApp quotation.</p>
   </div>
 
@@ -38,21 +39,21 @@
     <button class="btn btn-dark" type="submit">Search</button>
   </form>
 
-  <div class="hospital-list" style="margin-top: 2rem;">
+  <div class="photo-card-grid" style="margin-top: 2rem;">
     {% for hospital in hospitals %}
-      <article class="provider-card">
+      <a class="photo-card" href="{% url 'marketplace:hospital_detail' hospital.slug %}">
         {% if hospital.image_url %}
-          <img src="{{ hospital.image_url }}" alt="{{ hospital.name }}" />
+          <img src="{{ hospital.image_url }}" alt="" />
         {% endif %}
-        <div>
-          <div class="card-meta">{{ hospital.city }} · {{ hospital.accreditation }}</div>
-          <h3><a href="{% url 'marketplace:hospital_detail' hospital.slug %}">{{ hospital.name }}</a></h3>
-          <p>{{ hospital.summary }}</p>
-          <a class="text-link" href="{% url 'marketplace:hospital_detail' hospital.slug %}">View hospital</a>
+        <div class="photo-card-caption">
+          <p class="card-meta">{{ hospital.city }} · {{ hospital.accreditation }}</p>
+          <h3>{{ hospital.name }}</h3>
         </div>
-      </article>
+      </a>
     {% empty %}
-      <p>No hospitals found.</p>
+      <div class="empty-state">
+        <p>No hospitals found.</p>
+      </div>
     {% endfor %}
   </div>
 </section>

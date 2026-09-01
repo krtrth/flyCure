@@ -5,9 +5,9 @@
 {% block content %}
 <section class="section-pad auth-section">
   <div class="auth-card">
-    <p class="eyebrow">Patient access</p>
-    <h1>Log in to your FlyCure account</h1>
-    <p>Access uploaded reports, AI draft explanations, and saved searches.</p>
+    <p class="eyebrow">Patient desk</p>
+    <h1>Welcome back</h1>
+    <p>Open your private reports, draft explanations, and continue the conversation with a coordinator.</p>
     <form method="post" class="auth-form">
       {% csrf_token %}
       {% if form.non_field_errors %}
@@ -23,6 +23,7 @@
       <button class="btn btn-primary full-width" type="submit">Log in</button>
     </form>
     <p class="auth-switch">New patient? <a href="{% url 'accounts:register' %}">Create an account</a></p>
+    <p class="auth-switch">Hospital or doctor? <a href="{% url 'accounts:provider_login' %}">Provider login</a></p>
   </div>
 </section>
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Request a slot | {{ doctor.name }}{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_patient.html" with active="appointments" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="auth-card wide portal-card">
+  <p class="eyebrow">Hybrid scheduling</p>
+  <h1>Request a slot with {{ doctor.name }}</h1>
+  <p>This stays pending until the doctor confirms. WhatsApp remains the fastest way to enquire.</p>
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Send request</button>
+  </form>
+  <p class="auth-switch">
+    <a
+      href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, please check availability for '|urlencode }}{{ doctor.name|urlencode }}."
+      target="_blank"
+      rel="noreferrer"
+    >Prefer WhatsApp instead</a>
+  </p>
+</div>
+{% endblock %}

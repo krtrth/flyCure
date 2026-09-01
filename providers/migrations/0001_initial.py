@@ -84,6 +84,7 @@ class Migration(migrations.Migration):
                 ('specialty', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='packages', to='providers.specialty')),
             ],
             options={
+                'db_table': 'providers_treatment_package',
                 'ordering': ['name'],
             },
         ),

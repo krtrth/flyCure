@@ -5,9 +5,10 @@
 {% block content %}
 <section class="section-pad">
   <div class="section-heading align-left">
-    <p class="eyebrow">Doctor search</p>
-    <h1>Search doctors</h1>
-    <p>Compare specialists by specialty, city, and hospital affiliation.</p>
+    <p class="eyebrow">Directory</p>
+    <hr class="rule" />
+    <h1>Specialists</h1>
+    <p>Compare doctors by specialty, city, and hospital affiliation.</p>
   </div>
 
   <form class="search-grid" method="get">
@@ -50,7 +51,9 @@
         <span>{{ doctor.languages }}</span>
       </article>
     {% empty %}
-      <p>No doctors found.</p>
+      <div class="empty-state">
+        <p>No doctors found.</p>
+      </div>
     {% endfor %}
   </div>
 </section>

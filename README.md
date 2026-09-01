@@ -9,7 +9,28 @@ WhatsApp-first medical tourism marketplace for international patients comparing 
 - **Pillow** — image support for uploads
 - Apps: `marketplace`, `providers`, `accounts`, `records`, `ai_reports`
 
-## Quick start
+## Docker (recommended)
+
+Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+| Service | URL |
+| --- | --- |
+| FlyCure home | http://localhost:8000/ |
+| Patient login | http://localhost:8000/accounts/login/ (`patient` / `patient`) |
+| Doctor / hospital login | http://localhost:8000/accounts/provider/login/ (`doctor` / `doctor`, `hospital` / `hospital`) |
+| Django admin | http://localhost:8000/admin/ (`admin` / `admin`) |
+| phpMyAdmin | http://localhost:8080/ (user `flycure` / `flycure`, or `root` / `root`) |
+
+MySQL is available at `localhost:3306` (database `flycure`).
+
+## Local Python (SQLite)
+
+Leave `MYSQL_HOST` unset in `.env` to use SQLite.
 
 ```bash
 python3 -m venv .venv

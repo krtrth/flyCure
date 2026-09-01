@@ -1,18 +1,18 @@
-# Home page overrides — FlyCure Med-Tech
+# Home page overrides — Editorial Clinic
 
 ## Atmosphere
-- Full-bleed dark clinical hero with hospital imagery + soft cyan diagnostic overlay
-- Brand **FlyCure** is the hero-level signal in Space Grotesk
-- Search band reads like a command console / triage panel
+- Full-bleed hospital photography with a warm dark scrim
+- Serif headline in plain language
+- Search bar overlapping the hero fold as a cream paper card
 
 ## Section order
-1. Hero (brand + headline + CTA + visual plane)
-2. Search console
-3. Treatment grid (HUD cards)
-4. Hospitals / doctors / packages
-5. Journey timeline
-6. Final CTA
+1. Full-bleed hero (headline + WhatsApp + Explore)
+2. Overlapping search + trust rules
+3. Treatment tiles with unique icons
+4. Photo-led hospitals
+5. Portrait doctor cards
+6. Package table + journey numerals
+7. Closing photo spread + quote CTA
 
-## Motion
-- Staggered reveal on cards
-- Respect prefers-reduced-motion
+## Copy
+Lead with coordinator language, not diagnostic HUD language.

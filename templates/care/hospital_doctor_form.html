@@ -1,0 +1,28 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Edit doctor | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_hospital.html" with active="overview" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="auth-card wide portal-card">
+  <p class="eyebrow">Hospital desk</p>
+  <h1>Edit doctor</h1>
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}

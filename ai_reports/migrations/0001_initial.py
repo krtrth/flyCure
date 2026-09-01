@@ -29,6 +29,7 @@ class Migration(migrations.Migration):
                 ('report', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='explanation', to='records.medicalreport')),
             ],
             options={
+                'db_table': 'ai_reports_report_explanation',
                 'ordering': ['-updated_at'],
             },
         ),

@@ -29,6 +29,7 @@ class Migration(migrations.Migration):
                 ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='medical_reports', to=settings.AUTH_USER_MODEL)),
             ],
             options={
+                'db_table': 'records_medical_report',
                 'ordering': ['-uploaded_at'],
             },
         ),

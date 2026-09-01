@@ -1,38 +1,104 @@
-{% extends "base.html" %}
+{% extends "portal_base.html" %}
 
 {% block title %}My records | FlyCure{% endblock %}
 
-{% block content %}
-<section class="section-pad">
-  <div class="section-heading align-left">
-    <p class="eyebrow">Patient records</p>
-    <h1>Hello{% if user.first_name %}, {{ user.first_name }}{% endif %}</h1>
-    <p>Your uploaded medical reports stay private on your account. AI explanations are drafts for discussion with a doctor.</p>
-  </div>
+{% block sidebar %}
+  {% include "partials/sidebar_patient.html" with active="overview" %}
+{% endblock %}
 
-  <div class="hero-actions" style="margin-bottom: 2rem;">
-    <a class="btn btn-primary" href="{% url 'records:upload' %}">Upload a report</a>
-    <a class="btn btn-secondary" href="{% url 'marketplace:hospitals' %}">Search hospitals</a>
-    <a class="btn btn-secondary" href="{% url 'marketplace:doctors' %}">Search doctors</a>
-    <form method="post" action="{% url 'accounts:logout' %}">
-      {% csrf_token %}
-      <button class="btn btn-secondary" type="submit">Log out</button>
-    </form>
-  </div>
+{% block portal_content %}
+<div class="section-heading align-left">
+  <p class="eyebrow">Your file</p>
+  <hr class="rule" />
+  <h1>Hello{% if user.first_name %}, {{ user.first_name }}{% endif %}</h1>
+  <p>Reports, appointments, suggested tests, and past procedures stay on this private desk.</p>
+</div>
 
+<article class="dash-panel" id="profile">
+  <h2>Profile</h2>
+  <p>
+    {% if profile.age %}Age {{ profile.age }} · {% endif %}
+    {{ profile.get_gender_display|default:"Gender not set" }}
+    {% if profile.mobile %} · {{ profile.mobile }}{% endif %}
+    {% if user.email %} · {{ user.email }}{% endif %}
+    {% if profile.height_cm %} · {{ profile.height_cm }} cm{% endif %}
+    {% if profile.weight_kg %} · {{ profile.weight_kg }} kg{% endif %}
+    {% if profile.bmi %} · BMI {{ profile.bmi }}{% endif %}
+  </p>
+</article>
+
+<article class="dash-panel" id="appointments">
+  <h2>Appointments</h2>
+  {% for item in appointments %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{{ item.get_status_display }} · {{ item.doctor.name }}{% if item.slot %} · {{ item.slot.starts_at|date:"M j, Y H:i" }}{% endif %}</p>
+        <p>{{ item.notes|default:"No notes." }}</p>
+      </div>
+      {% if item.status == "requested" or item.status == "confirmed" %}
+        <form method="post" action="{% url 'care:appointment_cancel' item.pk %}">
+          {% csrf_token %}
+          <button class="btn btn-small btn-secondary" type="submit">Cancel</button>
+        </form>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="empty-state">No appointments yet. Request a slot on a doctor page, or continue on WhatsApp.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="prescriptions">
+  <h2>Prescriptions</h2>
   <div class="records-list">
     {% for report in reports %}
       <article class="record-card">
         <div>
           <p class="card-meta">{{ report.uploaded_at|date:"M j, Y H:i" }} · {{ report.get_status_display }}</p>
-          <h2><a href="{% url 'records:report_detail' report.pk %}">{{ report.title }}</a></h2>
+          <h3><a href="{% url 'records:report_detail' report.pk %}">{{ report.title }}</a></h3>
           <p>{% if report.treatment_need %}Need: {{ report.treatment_need }} · {% endif %}{{ report.description|default:"No notes added." }}</p>
         </div>
         <a class="btn btn-small" href="{% url 'records:report_detail' report.pk %}">Open</a>
       </article>
     {% empty %}
-      <p>No reports yet. Upload your first medical file to get a draft AI explanation.</p>
+      <p class="empty-state">No reports yet. Upload a prescription to start your file.</p>
     {% endfor %}
   </div>
-</section>
+</article>
+
+<article class="dash-panel" id="tests">
+  <h2>Suggested tests</h2>
+  {% for test in suggested_tests %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{{ test.get_status_display }}{% if test.doctor %} · {{ test.doctor.name }}{% endif %}</p>
+        <h3>{{ test.name }}</h3>
+        <p>{{ test.reason|default:"No notes." }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <p class="empty-state">No tests suggested yet. A doctor can add these after an appointment.</p>
+  {% endfor %}
+</article>
+
+<article class="dash-panel" id="history">
+  <div class="dash-panel-head">
+    <h2>Medical history</h2>
+    <a class="btn btn-small btn-secondary" href="{% url 'care:history_add' %}">Add a procedure</a>
+  </div>
+  {% for item in history_items %}
+    <div class="record-card">
+      <div>
+        <p class="card-meta">{% if item.year %}{{ item.year }}{% else %}Year not set{% endif %}{% if item.facility_name %} · {{ item.facility_name }}{% endif %}</p>
+        <h3>{{ item.procedure_name }}</h3>
+        <p>{{ item.notes|default:"" }}</p>
+      </div>
+      <form method="post" action="{% url 'care:history_delete' item.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-small btn-secondary" type="submit">Remove</button>
+      </form>
+    </div>
+  {% empty %}
+    <p class="empty-state">No past procedures recorded. Add surgeries or treatments you have already had.</p>
+  {% endfor %}
+</article>
 {% endblock %}

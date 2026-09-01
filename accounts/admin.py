@@ -21,5 +21,5 @@ admin.site.register(User, UserAdmin)
 
 @admin.register(PatientProfile)
 class PatientProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "country", "phone_whatsapp", "preferred_language", "created_at")
-    search_fields = ("user__username", "user__email", "country", "phone_whatsapp")
+    list_display = ("user", "country", "mobile", "gender", "bmi", "created_at")
+    search_fields = ("user__username", "user__email", "country", "mobile", "phone_whatsapp")

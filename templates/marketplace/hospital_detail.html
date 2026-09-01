@@ -4,71 +4,83 @@
 
 {% block content %}
 <section class="section-pad">
-  <div class="section-heading align-left">
-    <p class="eyebrow">{{ hospital.city }} · {{ hospital.accreditation }}</p>
-    <h1>{{ hospital.name }}</h1>
-    <p>{{ hospital.summary }}</p>
-  </div>
-
   {% if hospital.image_url %}
-    <div class="panel-image" style="max-width: 720px; margin-bottom: 2rem;">
+    <div class="detail-media">
       <img src="{{ hospital.image_url }}" alt="{{ hospital.name }}" />
     </div>
   {% endif %}
 
-  <div class="tags" style="margin-bottom: 2rem;">
-    {% for specialty in hospital.specialties.all %}
-      <span>{{ specialty.name }}</span>
-    {% endfor %}
-    {% for tag in hospital.tag_list %}
-      <span>{{ tag }}</span>
-    {% endfor %}
-  </div>
+  <div class="detail-spread">
+    <div class="detail-body">
+      <p class="eyebrow">{{ hospital.city }} · {{ hospital.accreditation }}</p>
+      <h1>{{ hospital.name }}</h1>
+      <p class="detail-lede">{{ hospital.summary }}</p>
+      {% if hospital.features %}
+        <p>{{ hospital.features }}</p>
+      {% endif %}
 
-  <div class="hero-actions" style="margin-bottom: 3rem;">
-    <a
-      class="btn btn-primary"
-      href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, I want a quote from '|urlencode }}{{ hospital.name|urlencode }}."
-      target="_blank"
-      rel="noreferrer"
-    >
-      Request WhatsApp quote
-    </a>
-    <a class="btn btn-secondary" href="{% url 'records:upload' %}">Upload reports for review</a>
-  </div>
+      <div class="tags" style="margin: 1.5rem 0 2.5rem;">
+        {% for specialty in hospital.specialties.all %}
+          <span>{{ specialty.name }}</span>
+        {% endfor %}
+        {% for tag in hospital.tag_list %}
+          <span>{{ tag }}</span>
+        {% endfor %}
+      </div>
 
-  <h2>Doctors</h2>
-  <div class="doctor-grid" style="margin: 1.5rem 0 3rem;">
-    {% for doctor in hospital.doctors.all %}
-      <article class="doctor-card">
-        <div class="doctor-avatar">{{ doctor.initials }}</div>
-        <h3><a href="{% url 'marketplace:doctor_detail' doctor.slug %}">{{ doctor.name }}</a></h3>
-        <p>{{ doctor.title }} · {{ doctor.years_experience }} years</p>
-        <p>{{ doctor.bio }}</p>
-      </article>
-    {% empty %}
-      <p>No doctors listed yet.</p>
-    {% endfor %}
-  </div>
+      <h2>Doctors</h2>
+      <div class="doctor-grid" style="margin: 1.5rem 0 3rem;">
+        {% for doctor in hospital.doctors.all %}
+          <article class="doctor-card">
+            <div class="doctor-avatar">{{ doctor.initials }}</div>
+            <h3><a href="{% url 'marketplace:doctor_detail' doctor.slug %}">{{ doctor.name }}</a></h3>
+            <p>{{ doctor.title }} · {{ doctor.years_experience }} years</p>
+            <p>{{ doctor.bio }}</p>
+          </article>
+        {% empty %}
+          <p>No doctors listed yet.</p>
+        {% endfor %}
+      </div>
 
-  <h2>Packages</h2>
-  <div class="package-table" style="margin-top: 1.5rem;">
-    <div class="package-row table-head" role="row">
-      <span>Package</span>
-      <span>Typical stay</span>
-      <span>Quote</span>
+      <h2>Packages</h2>
+      <div class="package-table compact" style="margin-top: 1.5rem;">
+        <div class="package-row table-head" role="row">
+          <span>Package</span>
+          <span>Typical stay</span>
+          <span>Approx. range</span>
+          <span>Quote</span>
+        </div>
+        {% for package in hospital.packages.all %}
+          <div class="package-row" role="row">
+            <span>{{ package.name }}</span>
+            <span>{{ package.typical_stay }}</span>
+            <span>{{ package.approx_cost_label|default:"On request" }}</span>
+            <a href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, quote for '|urlencode }}{{ package.name|urlencode }}." target="_blank" rel="noreferrer">
+              WhatsApp quote
+            </a>
+          </div>
+        {% empty %}
+          <p>No packages listed yet.</p>
+        {% endfor %}
+      </div>
     </div>
-    {% for package in hospital.packages.all %}
-      <div class="package-row" role="row">
-        <span>{{ package.name }}</span>
-        <span>{{ package.typical_stay }}</span>
-        <a href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, quote for '|urlencode }}{{ package.name|urlencode }}." target="_blank" rel="noreferrer">
+
+    <aside class="detail-cta">
+      <p class="eyebrow">Coordinator</p>
+      <h2>Request a private quote</h2>
+      <p>Share reports first. A coordinator will return two or three hospital-ready options on WhatsApp.</p>
+      <div class="hero-actions" style="margin-top: 0;">
+        <a
+          class="btn btn-primary full-width"
+          href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, I want a quote from '|urlencode }}{{ hospital.name|urlencode }}."
+          target="_blank"
+          rel="noreferrer"
+        >
           WhatsApp quote
         </a>
+        <a class="btn btn-secondary full-width" href="{% url 'records:upload' %}">Upload reports</a>
       </div>
-    {% empty %}
-      <p>No packages listed yet.</p>
-    {% endfor %}
+    </aside>
   </div>
 </section>
 {% endblock %}

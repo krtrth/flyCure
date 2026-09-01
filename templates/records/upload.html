@@ -1,25 +1,26 @@
-{% extends "base.html" %}
+{% extends "portal_base.html" %}
 
 {% block title %}Upload report | FlyCure{% endblock %}
 
-{% block content %}
-<section class="section-pad auth-section">
-  <div class="auth-card wide">
-    <p class="eyebrow">Private upload</p>
-    <h1>Upload a medical report</h1>
-    <p>PDF, images, or scanned prescriptions. Files are tied to your patient account and not shown publicly.</p>
-    <form method="post" enctype="multipart/form-data" class="auth-form">
-      {% csrf_token %}
-      {% for field in form %}
-        <label>
-          {{ field.label }}
-          {{ field }}
-          {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
-        </label>
-      {% endfor %}
-      <button class="btn btn-primary full-width" type="submit">Upload and explain</button>
-    </form>
-    <p class="auth-switch"><a href="{% url 'records:dashboard' %}">Back to my records</a></p>
-  </div>
-</section>
+{% block sidebar %}
+  {% include "partials/sidebar_patient.html" with active="upload" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="auth-card wide portal-card">
+  <p class="eyebrow">Private upload</p>
+  <h1>Add a medical report</h1>
+  <p>PDF, images, or scanned prescriptions. Files stay on your account and are never listed publicly.</p>
+  <form method="post" enctype="multipart/form-data" class="auth-form">
+    {% csrf_token %}
+    {% for field in form %}
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Upload and explain</button>
+  </form>
+</div>
 {% endblock %}

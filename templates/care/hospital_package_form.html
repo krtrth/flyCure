@@ -1,0 +1,29 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Package | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_hospital.html" with active="package" %}
+{% endblock %}
+
+{% block portal_content %}
+<div class="auth-card wide portal-card">
+  <p class="eyebrow">Hospital desk</p>
+  <h1>Treatment package</h1>
+  <p>Approximate ranges may appear publicly. Exact quotations still go through WhatsApp.</p>
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for field in form %}
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
+      </label>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}

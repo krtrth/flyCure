@@ -26,3 +26,4 @@ staticfiles/
 local_settings.py
 .cursor/mcp.json
 .cursor/
+.copilot/

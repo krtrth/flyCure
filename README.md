@@ -29,6 +29,20 @@ docker compose up --build
 
 MySQL is available at `localhost:3306` (database `flycure`).
 
+## Render deployment (Docker)
+
+The Docker image supports both the local MySQL Compose setup and a Render PostgreSQL `DATABASE_URL`.
+For a limited team demo:
+
+1. Push the project to GitHub without `.env` (it is ignored).
+2. In Render, create a PostgreSQL database and a Docker web service from this repository, in the same region.
+3. Set the web service's `DATABASE_URL` to the database's **internal** connection URL.
+4. Add `DJANGO_SECRET_KEY` using Render's Generate option, and set `DJANGO_DEBUG=False` and `REPORT_UPLOADS_ENABLED=False`.
+5. Deploy with the Dockerfile defaults; the container runs migrations, collects static files, and starts Gunicorn.
+6. Create an admin user from the Render Shell with `python manage.py createsuperuser`.
+
+The app automatically allows `RENDER_EXTERNAL_HOSTNAME` and trusts its HTTPS origin for CSRF. Do not copy `.env` into Render. Free database availability, lifetime, storage, and web-service sleep behavior can change; check Render's current free-tier limits and export data you need to keep. This app is not approved for real patient information, and a Render URL is public unless you add an access-control layer.
+
 ## Local Python (SQLite)
 
 Leave `MYSQL_HOST` unset in `.env` to use SQLite.
@@ -72,6 +86,7 @@ See `.env.example`:
 - `DJANGO_SECRET_KEY`
 - `DJANGO_DEBUG`
 - `DJANGO_ALLOWED_HOSTS`
+- `DATABASE_URL` (PostgreSQL connection URL for Render; keep it secret)
 - `WHATSAPP_NUMBER`
 - `OPENAI_API_KEY` (optional)
 - `AI_REPORT_MODEL`

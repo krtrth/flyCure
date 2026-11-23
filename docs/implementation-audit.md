@@ -19,7 +19,7 @@ This is a code-and-local-runtime baseline against the [Updated PRD](./FlyCure_Up
 | Provider verification and content governance (MKT-07–08, OPS-01–02) | Missing | There is no provider-verification record or review workflow. Hospital accreditation is editable through [care/forms.py](../care/forms.py) and [care/views.py](../care/views.py), without evidence review or approval history. |
 | Demo marketplace data (MKT-08) | Mitigated; approval workflow remains open | Public queries now exclude sample hospitals/doctors and listings tied to sample hospitals when `DEBUG=False`; the seed command refuses to run in that mode, and Docker startup skips it. Existing production records must be explicitly marked non-sample to appear. A separate evidence-backed provider approval workflow is still missing. |
 | Privacy operations (ACC-05, REC-06–07) | Missing | No application records for consent/privacy-notice versions, report access audit events, or report retention/deletion requests were found in the reviewed account and records code. |
-| Production configuration (PRD 11.2, 16.3) | Release blocker | [config/settings.py](../config/settings.py) defaults `DEBUG` to true and has a development secret-key fallback; production secure-cookie, HTTPS, and HSTS settings are not configured there. Local Docker settings are for development and are not evidence of production readiness. |
+| Production configuration (PRD 11.2, 16.3) | Partial; public release remains blocked | [config/settings.py](../config/settings.py) now supports Render PostgreSQL URLs, Render host/CSRF configuration, WhiteNoise static files, secure cookies, HTTPS redirects, HSTS, and rejects the development secret when `DEBUG=False`. Team-only access control, production operations, privacy controls, and deployment verification are still outstanding. |
 | Care workflows and provider operations (OPS-03–06) | Partial | Availability, appointment-request, and provider-dashboard flows exist. The PRD requires explicit confirmation, operational ownership, source/timezone metadata, and quote lifecycle controls; these need further validation and completion before claims of confirmed appointments or operational service are made. |
 | Automated quality coverage (PRD 16) | Partial | Focused tests cover report access, upload validation, AI-stub labeling, and production sample visibility. Other app test modules remain placeholders; the PRD’s broader role, enquiry, care-lifecycle, and operational test coverage is not present. |
 
@@ -32,6 +32,7 @@ This is a code-and-local-runtime baseline against the [Updated PRD](./FlyCure_Up
 - Sample records are hidden from public marketplace queries and sample seeding is skipped when `DEBUG=False`.
 - Report uploads enforce the documented PDF/JPEG/PNG/DOCX, 10 MB policy and reject mismatched extensions, MIME types, and signatures.
 - Report upload is disabled by default for this limited-access MVP. The Docker default stack no longer starts a scanner service.
+- The Docker entrypoint retains local MySQL development behavior and supports PostgreSQL `DATABASE_URL`, static collection, and Gunicorn for a Render deployment.
 - Local test-only artifacts from the runtime access probe were deleted after verification.
 
 ## Remaining release blockers and decisions

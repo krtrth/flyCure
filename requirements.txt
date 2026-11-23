@@ -2,3 +2,7 @@ Django==6.1
 Pillow==12.3.0
 python-dotenv==1.2.2
 mysqlclient==2.2.7
+dj-database-url>=2.3,<4
+gunicorn>=23,<24
+psycopg[binary]>=3.2,<4
+whitenoise>=6.9,<7

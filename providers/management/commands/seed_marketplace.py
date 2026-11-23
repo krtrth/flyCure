@@ -1,7 +1,8 @@
 from datetime import date, timedelta
 
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -40,6 +41,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        if not settings.DEBUG:
+            raise CommandError("Sample marketplace data can only be seeded when DEBUG is enabled.")
+
         force = options["force"]
         specialty_map = self._seed_specialties()
         catalog_exists = Hospital.objects.exists() and Doctor.objects.exists()

@@ -1,5 +1,10 @@
-from django.shortcuts import get_object_or_404, redirect
+from pathlib import Path
+
+from django.conf import settings
+from django.http import FileResponse, Http404, HttpResponseNotAllowed
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import CreateView, DetailView, ListView, View
 
 from accounts.mixins import PatientRequiredMixin
@@ -40,6 +45,16 @@ class ReportUploadView(PatientRequiredMixin, CreateView):
     template_name = "records/upload.html"
     success_url = reverse_lazy("records:dashboard")
 
+    def get(self, request, *args, **kwargs):
+        if not settings.REPORT_UPLOADS_ENABLED:
+            return render(request, "records/upload_disabled.html")
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if not settings.REPORT_UPLOADS_ENABLED:
+            return HttpResponseNotAllowed(["GET"])
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.patient = self.request.user
         response = super().form_valid(form)
@@ -56,6 +71,27 @@ class ReportDetailView(PatientRequiredMixin, DetailView):
         return MedicalReport.objects.filter(patient=self.request.user).select_related(
             "explanation"
         )
+
+
+class ReportFileView(PatientRequiredMixin, View):
+    def get(self, request, pk):
+        report = get_object_or_404(MedicalReport, pk=pk, patient=request.user)
+        try:
+            report.file.open("rb")
+        except FileNotFoundError as exc:
+            raise Http404("Report file not found.") from exc
+
+        filename = slugify(report.title) or "medical-report"
+        suffix = Path(report.file.name).suffix
+        response = FileResponse(
+            report.file,
+            as_attachment=True,
+            filename=f"{filename}{suffix}",
+            content_type="application/octet-stream",
+        )
+        response["Cache-Control"] = "private, no-store"
+        response["X-Content-Type-Options"] = "nosniff"
+        return response
 
 
 class RequestExplanationView(PatientRequiredMixin, View):

@@ -6,7 +6,13 @@
 <section class="section-pad">
   <div class="detail-spread">
     <div class="detail-body">
-      <p class="eyebrow">{{ doctor.title }} · {{ doctor.city }}</p>
+      <p class="eyebrow">{{ doctor.title }} · {{ doctor.city }}{% if doctor.is_sample %} · Demo profile{% endif %}</p>
+      {% if doctor.is_sample %}
+        <div class="demo-notice" role="note">
+          <strong>Illustrative profile</strong>
+          <span>This is fictional demo content, not a real doctor profile.</span>
+        </div>
+      {% endif %}
       <h1>{{ doctor.name }}</h1>
       <p class="detail-lede">{{ doctor.years_experience }} years of practice · {{ doctor.languages }}</p>
 
@@ -26,9 +32,9 @@
     </div>
 
     <aside class="detail-cta">
-      <p class="eyebrow">Availability</p>
+      <p class="eyebrow">Next steps</p>
       <h2>Ask a coordinator</h2>
-      <p>We confirm consulting slots and video consult options privately on WhatsApp.</p>
+      <p>Ask about availability. An enquiry or slot request is not a confirmed appointment.</p>
       <div class="hero-actions" style="margin-top: 0;">
         <a
           class="btn btn-primary full-width"
@@ -39,7 +45,6 @@
           Check on WhatsApp
         </a>
         <a class="btn btn-secondary full-width" href="{% url 'care:appointment_request' doctor.slug %}">Request a slot on-site</a>
-        <a class="btn btn-secondary full-width" href="{% url 'records:upload' %}">Upload reports</a>
       </div>
     </aside>
   </div>

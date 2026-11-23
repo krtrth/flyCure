@@ -1,0 +1,19 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Report uploads unavailable | FlyCure{% endblock %}
+
+{% block sidebar %}
+  {% include "partials/sidebar_patient.html" with active="reports" %}
+{% endblock %}
+
+{% block portal_content %}
+<section class="auth-card wide portal-card" aria-labelledby="upload-unavailable-title">
+  <p class="eyebrow">Medical reports</p>
+  <h1 id="upload-unavailable-title">Report uploads are temporarily unavailable</h1>
+  <p>
+    This FlyCure MVP is for limited team review. Please do not send medical reports or other
+    sensitive health information through this site.
+  </p>
+  <a class="btn btn-secondary" href="{% url 'records:dashboard' %}">Return to my records</a>
+</section>
+{% endblock %}

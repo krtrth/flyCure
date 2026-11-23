@@ -118,6 +118,16 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+PRIVATE_MEDIA_ROOT = Path(os.getenv("PRIVATE_MEDIA_ROOT", BASE_DIR / "private_media"))
+MAX_REPORT_UPLOAD_SIZE_MB = int(os.getenv("MAX_REPORT_UPLOAD_SIZE_MB", "10"))
+REPORT_UPLOADS_ENABLED = os.getenv("REPORT_UPLOADS_ENABLED", "False").lower() in {
+    "1",
+    "true",
+    "yes",
+}
+CLAMAV_HOST = os.getenv("CLAMAV_HOST", "127.0.0.1")
+CLAMAV_PORT = int(os.getenv("CLAMAV_PORT", "3310"))
+CLAMAV_SCAN_TIMEOUT_SECONDS = int(os.getenv("CLAMAV_SCAN_TIMEOUT_SECONDS", "30"))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

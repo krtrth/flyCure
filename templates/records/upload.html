@@ -10,13 +10,14 @@
 <div class="auth-card wide portal-card">
   <p class="eyebrow">Private upload</p>
   <h1>Add a medical report</h1>
-  <p>PDF, images, or scanned prescriptions. Files stay on your account and are never listed publicly.</p>
+  <p>Use this local demo with non-sensitive sample files only. Do not upload real patient records.</p>
   <form method="post" enctype="multipart/form-data" class="auth-form">
     {% csrf_token %}
     {% for field in form %}
       <label>
         {{ field.label }}
         {{ field }}
+        {% if field.help_text %}<small class="help">{{ field.help_text }}</small>{% endif %}
         {% if field.errors %}<span class="field-error">{{ field.errors|striptags }}</span>{% endif %}
       </label>
     {% endfor %}

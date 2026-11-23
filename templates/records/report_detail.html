@@ -3,7 +3,7 @@
 {% block title %}{{ report.title }} | FlyCure{% endblock %}
 
 {% block sidebar %}
-  {% include "partials/sidebar_patient.html" with active="prescriptions" %}
+  {% include "partials/sidebar_patient.html" with active="reports" %}
 {% endblock %}
 
 {% block portal_content %}
@@ -17,18 +17,25 @@
   </p>
 </div>
 
-<div class="hero-actions" style="margin-bottom: 2rem;">
-  <a class="btn btn-secondary" href="{{ report.file.url }}" target="_blank" rel="noreferrer">Download file</a>
+<div class="hero-actions report-actions">
+  <a class="btn btn-secondary" href="{% url 'records:report_file' report.pk %}">Download file</a>
   <form method="post" action="{% url 'records:request_explanation' report.pk %}">
     {% csrf_token %}
-    <button class="btn btn-primary" type="submit">Regenerate AI explanation</button>
+    <button class="btn btn-primary" type="submit">Refresh demo explanation</button>
   </form>
 </div>
 
 <article class="explanation-panel">
-  <h2>AI explanation</h2>
+  <h2>Report explanation</h2>
   {% if report.explanation and report.explanation.status == "complete" %}
-    <p class="card-meta">Model: {{ report.explanation.model_name }}</p>
+    {% if report.explanation.model_name == "local-stub" %}
+      <div class="demo-notice" role="note">
+        <strong>Sample output only</strong>
+        <span>This demo text was not generated from your uploaded report and is not medical advice.</span>
+      </div>
+    {% else %}
+      <p class="card-meta">Model: {{ report.explanation.model_name }}</p>
+    {% endif %}
     <h3>Summary</h3>
     <p>{{ report.explanation.summary }}</p>
     <h3>Key findings</h3>
@@ -39,7 +46,7 @@
   {% elif report.explanation and report.explanation.status == "failed" %}
     <p class="field-error">Explanation failed: {{ report.explanation.error_message }}</p>
   {% else %}
-    <p>Explanation is still pending. Use regenerate if needed.</p>
+    <p>The demo explanation is not available yet. You can refresh the sample output.</p>
   {% endif %}
 </article>
 {% endblock %}

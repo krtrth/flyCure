@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=4" />
     {% block extra_css %}{% endblock %}
   </head>
   <body data-whatsapp="{{ WHATSAPP_NUMBER }}">
@@ -83,12 +83,12 @@
           {% endif %}
         </p>
         <p>
-          Sample providers may be fictional in early demos. Medical decisions and quotations require doctor review.
+          Profiles labeled “Demo” are fictional. Confirm provider details, medical suitability, availability, and quotations directly with the provider.
         </p>
       </div>
     </footer>
 
-    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/script.js' %}?v=3"></script>
     {% block extra_js %}{% endblock %}
   </body>
 </html>

@@ -51,12 +51,16 @@ services:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_EMAIL: admin@flycure.local
       DJANGO_SUPERUSER_PASSWORD: admin
+      PRIVATE_MEDIA_ROOT: /private-media
+      REPORT_UPLOADS_ENABLED: "False"
     ports:
       - "8000:8000"
     volumes:
       - .:/app
       - flycure_media:/app/media
+      - flycure_private_media:/private-media
 
 volumes:
   flycure_mysql_data:
   flycure_media:
+  flycure_private_media:

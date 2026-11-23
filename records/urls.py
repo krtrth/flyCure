@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     PatientDashboardView,
     ReportDetailView,
+    ReportFileView,
     ReportUploadView,
     RequestExplanationView,
 )
@@ -13,5 +14,6 @@ urlpatterns = [
     path("", PatientDashboardView.as_view(), name="dashboard"),
     path("upload/", ReportUploadView.as_view(), name="upload"),
     path("<int:pk>/", ReportDetailView.as_view(), name="report_detail"),
+    path("<int:pk>/file/", ReportFileView.as_view(), name="report_file"),
     path("<int:pk>/explain/", RequestExplanationView.as_view(), name="request_explanation"),
 ]

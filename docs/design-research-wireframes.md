@@ -12,9 +12,19 @@ Tone: premium hospital-grade, warm and reassuring, affordable and practical.
 
 Chosen product stance: a balanced hybrid of premium marketplace and personal medical concierge.
 
-Demo data stance: use realistic-sounding fictional sample hospitals and doctors in the static site until real partner data is available.
+Demo data stance: use clearly labelled fictional sample hospitals and doctors until real partner data is available.
 
-Primary conversion path: WhatsApp-first. Treatment quotations are not shown as fixed public prices; they are shared through WhatsApp after the patient sends treatment needs and medical reports.
+Primary conversion path: WhatsApp-first. Do not show unconfirmed fixed prices or require patients to send reports through WhatsApp; providers confirm any quotation after reviewing the relevant information through an approved process.
+
+## Status and source of truth
+
+This file is exploratory research and a directional wireframe, not approved production copy or a complete description of shipped functionality. For implementation, use the [updated PRD](./FlyCure_Updated_PRD.md) for product scope and safety rules, the [design requirements](./FlyCure_Design_Requirements.md) for visual tokens, and the [high-fidelity mockups](./FlyCure_High_Fidelity_Visual_Mockups.png) as visual reference.
+
+- Treat market statistics and competitor statements below as unverified until independently sourced and approved.
+- Do not publish unverified accreditation, ratings, outcomes, provider counts, response-time commitments, visa/travel services, or patient stories.
+- Label fictional profiles and sample package data clearly; never imply they represent real partners.
+- WhatsApp prefilled messages must be user-editable and contain no patient health information.
+- Keep the experience within the current web marketplace scope. A wireframe does not authorize diagnosis, treatment recommendations, telemedicine, travel fulfillment, or other deferred services.
 
 ## Research Snapshot
 
@@ -42,27 +52,24 @@ Use these as design proof-points, not as unsourced marketing claims:
 
 Working concept:
 
-"Compare accredited hospitals, doctors, and treatment packages in India, with a dedicated care coordinator from first report review to recovery follow-up."
+"Explore and compare available information about hospitals, doctors, and treatment options in India, then contact a care coordinator with questions."
 
 ### Visual Language
 
 - Clean hospital-grade layout with generous whitespace and precise information hierarchy.
 - Palette should avoid a cold all-blue hospital look. Suggested: deep ink text, clinical teal accents, warm ivory surfaces, soft green success states, restrained amber cost highlights.
 - Real healthcare and city imagery should be used later, but the first viewport should emphasize the marketplace search experience, not a marketing hero alone.
-- Cards should be practical and information-dense: accreditation, city, specialties, doctors, beds, typical stay estimate, response time, and WhatsApp quote action.
+- Cards should prioritize available provider details: name, city, specialties, profile information, and a clear next action.
+- Show verification labels only when current evidence and approval records support them. Mark fictional data as demo content.
 
-### Core Trust Signals
+### Trust and transparency
 
-- Verified hospitals and doctors
-- JCI/NABH/ISO accreditation where applicable
-- Transparent package ranges
-- Medical visa and invitation support
-- Multilingual coordinators
-- Report review before travel
-- Secure medical record handling
-- Dedicated case manager
-- Follow-up after return home
-- WhatsApp-first coordination for faster international communication
+- Explain what information is provided and what a patient should confirm directly.
+- Display provider credentials or accreditation only when verified with documented evidence.
+- Distinguish indicative package information from a provider-confirmed quotation.
+- Avoid response-time, travel-support, report-review, or follow-up promises until operationally approved.
+- Keep health information out of WhatsApp prefilled messages.
+- Label demo profiles and package details in a way that cannot be mistaken for real listings.
 
 ## Information Architecture
 
@@ -73,53 +80,48 @@ Top navigation:
 - Doctors
 - Packages
 - Patient Journey
-- Cost Guides
-- Stories
 - WhatsApp
 
-Persistent CTAs:
+Use existing routes and anchors; add navigation destinations only when those pages exist. Primary CTAs:
 
 - WhatsApp Coordinator
-- Get Free Treatment Plan
-- Upload Reports
+- Browse hospitals or doctors
+- Upload a report from the signed-in patient area
 
 ## Page 1: Homepage Wireframe
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ Logo       Treatments Hospitals Doctors Packages Journey Stories  WhatsApp  │
+│ Logo          Treatments  Hospitals  Doctors  Journey        Contact        │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ H1: Compare treatment options in India with expert guidance                 │
-│ Subcopy: Accredited hospitals, verified specialists, transparent packages,  │
-│ and one coordinator from report review to recovery.                         │
+│ H1: Explore care in India, with a clearer path forward                      │
+│ Subcopy: Compare available hospital and doctor information, explore options,│
+│ and ask a human care coordinator about next steps.                          │
 │                                                                            │
-│ [Search treatment, doctor, hospital] [Country] [Budget] [Find options]      │
-│ Popular: Cardiac | IVF | Dental | Orthopedic | Oncology | Cosmetic          │
+│ [Search care options] [Specialty] [City] [Search options]                   │
 │                                                                            │
-│ Trust strip: JCI/NABH partners | 24h plan | Visa support | Secure records   │
+│ Context: Explore providers | Compare available details | Ask when ready     │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Allopathic treatment categories grid                                        │
 │ Cardiac  Orthopedic  Oncology  IVF  Dental  Cosmetic  Transplant  Neuro     │
 │ Gastro   Urology     Bariatric Ophthalmology ENT  Multi-specialty           │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Featured comparison module                                                  │
-│ Hospital card      Doctor card       Package card       WhatsApp panel      │
-│ City/accreditation Experience      Custom quote       "Chat with coordinator"│
+│ Hospital and doctor profiles, clearly marking fictional demo data           │
+│ Available profile information; no inferred ratings, credentials or prices  │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ How it works: 1 Upload reports  2 Compare options  3 Video consult          │
-│               4 Travel to India 5 Treatment & recovery 6 Follow-up          │
+│ Journey: Explore -> Compare -> Ask questions -> Confirm directly            │
+│ Patient account/report links appear only when relevant and clearly explained│
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Why India: affordability, specialists, English-speaking care, accreditation  │
-├────────────────────────────────────────────────────────────────────────────┤
-│ Patient stories + source countries + FAQs + final quote form                │
+│ Final coordinator CTA with a non-sensitive, editable WhatsApp starter       │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Homepage priority:
 
 - Lead with search and comparison.
-- Put the WhatsApp coordinator panel above the fold or as a right-side panel on desktop.
-- Show real marketplace inventory early: hospitals, doctors, package types, stay estimates, and WhatsApp quote actions.
+- Make the coordinator contact route visible without promising a response time.
+- Show available provider inventory early and label sample content.
+- Use a calm patient/coordinator image rather than operating-room imagery.
 
 ## Page 2: Treatment Detail Wireframe
 
@@ -130,22 +132,21 @@ Example: Knee Replacement in India
 │ Breadcrumb: Treatments > Orthopedics > Knee Replacement                     │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ H1: Knee replacement in India                                               │
-│ Quick stats: Custom quote on WhatsApp | 5-7 hospital days | 2-4 week plan   │
-│ [Chat on WhatsApp] [Compare hospitals] [Upload reports]                     │
+│ Context: indicative information only; confirm clinical and commercial details│
+│ [Ask a question] [Browse providers]                                         │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Tabs: Overview | Costs | Hospitals | Doctors | Recovery | FAQs              │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Left: treatment overview, who it helps, procedure types                     │
 │ Right sticky: WhatsApp coordinator + upload reports form                    │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Cost table: standard / advanced implant / bilateral                         │
-│ Includes: surgeon, hospital stay, implant, tests, airport transfer optional  │
+│ Cost explainer: quote depends on provider review and confirmed scope        │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Recommended hospitals with filters: city, accreditation, budget, language    │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Doctor list: specialty, years, hospital, languages, video consult CTA        │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Timeline: report review -> travel clearance -> surgery -> rehab -> followup │
+│ Any care timeline is provider-confirmed, not a FlyCure guarantee             │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -160,22 +161,20 @@ Treatment page priority:
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ Hospital image/banner                                                       │
-│ Hospital name | City, India | Rating | JCI/NABH/ISO badges                  │
-│ Specialties chips | Beds | International desk | Languages                   │
-│ [Chat with coordinator] [Request quote] [Book video consult]                │
+│ Hospital name | City | clearly sourced profile information                  │
+│ Specialties chips | approved provider details                               │
+│ [Ask a coordinator] [View listed information]                               │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Overview | Specialties | Doctors | Packages | Facilities | Reviews          │
+│ Overview | Specialties | Doctors | Packages                                 │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Key reasons to choose: accreditation, equipment, high-volume specialties     │
+│ Provider-supplied details with source/verification status where available   │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Top doctors at this hospital                                                │
 │ Doctor cards with specialty, experience, languages, availability            │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Package cards: treatment, quote via WhatsApp, stay, inclusions, exclusions   │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ Facilities: ICU, robotic surgery, interpreter, family stay, airport pickup   │
-├────────────────────────────────────────────────────────────────────────────┤
-│ Patient reviews and coordinator help panel                                  │
+│ Only facilities and services with approved supporting information           │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -190,18 +189,13 @@ Hospital page priority:
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ H1: Compare treatment packages in India                                     │
-│ Filters: Treatment | City | Hospital type | Accreditation | Stay            │
+│ Filters: Treatment | City | supported provider attributes                    │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Compare table                                                               │
-│ Package        Hospital              Doctor        Quote       Stay   CTA    │
-│ CABG           Asteria Heart Centre   Cardiac team   WhatsApp    4-6 d WhatsApp│
-│ Dental implant NovaDent Global Care   Dentist        WhatsApp    OPD   WhatsApp│
-│ IVF cycle      BloomBridge Fertility  Fertility      WhatsApp    OPD   WhatsApp│
-│ Knee replace   Meridian Ortho MedCity Ortho          WhatsApp    5-7 d WhatsApp│
+│ Package        Provider              Scope          Price       Stay   CTA   │
+│ Demo item      Demo provider         Confirmed by provider       Ask for info│
 ├────────────────────────────────────────────────────────────────────────────┤
-│ What custom quotes may include/exclude                                      │
-│ Included: consultation, surgery, standard hospital stay, basic tests         │
-│ Excluded: complications, extended stay, donor costs, travel, premium rooms   │
+│ Ask provider to confirm scope, inclusions, exclusions, currency, validity    │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ WhatsApp-first custom quote panel                                           │
 └────────────────────────────────────────────────────────────────────────────┘
@@ -216,21 +210,17 @@ Package page priority:
 ## Page 5: Consultation / Contact Flow Wireframe
 
 ```text
-Step 1: Patient basics
-Name, country, WhatsApp, email, preferred language
+Step 1: Explore public provider and specialty information without signing in.
 
-Step 2: Treatment need
-Treatment category, diagnosis, desired city/budget, urgency
+Step 2: If the patient chooses to enquire, open WhatsApp with a generic, editable
+starter message. Do not prefill diagnosis, treatment need, country, reports, or
+other patient information.
 
-Step 3: Medical reports
-Upload reports/images/prescriptions, notes, previous treatment
+Step 3: Let the patient decide what to share directly with the care team.
+Provide an approved alternative contact route if WhatsApp is unavailable.
 
-Step 4: Preferences
-Hospital type, doctor gender if relevant, room type, attendant count, visa help
-
-Step 5: WhatsApp handoff and confirmation
-"Your coordinator can review your case on WhatsApp and share 2-3 suitable options within 24 hours."
-Show WhatsApp continuation, report privacy reassurance, and email backup.
+Step 4: Keep report upload inside the authenticated patient account and explain
+supported formats and privacy handling before accepting real health data.
 ```
 
 Flow priority:
@@ -247,7 +237,7 @@ Flow priority:
 - Package comparison rows
 - Coordinator CTA panel
 - Patient journey timeline
-- Accreditation/trust strip
+- Evidence and data-provenance indicators
 - Cost explainer panel
 - FAQ accordion
 - Report upload form
@@ -256,15 +246,15 @@ Flow priority:
 ## Resolved Direction
 
 1. Brand stance: balanced hybrid of marketplace and concierge.
-2. Static demo data: sample hospitals and sample doctors.
+2. Demo data: clearly labelled fictional sample hospitals and doctors; never imply they are partners.
 3. Audience: broad global English.
 4. Conversion: WhatsApp-first.
 5. Treatment taxonomy: allopathic categories only.
 6. Brand name: FlyCure.
 7. Quotations: shared through WhatsApp, not displayed as fixed public prices.
-8. Sample providers: realistic fictional hospital and doctor names.
+8. Provider claims, ratings, prices, outcomes, and service commitments: show only when supported and approved.
 
 ## Remaining Design Questions
 
-1. Should FlyCure use a more clinical visual identity or a more travel-enabled care identity?
-2. Should we build one long scrolling static page first, or separate static pages for homepage, treatment, hospital, packages, and contact flow?
+1. The visual direction is defined in `FlyCure_Design_Requirements.md`: warm, premium, and hospital-grade without unsupported care or travel promises.
+2. The current app uses a responsive homepage plus separate hospital and doctor directories/details. Future page types require product scope in the PRD before implementation.

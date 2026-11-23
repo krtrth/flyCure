@@ -1,7 +1,29 @@
-from django.db.models import Q
+from django.conf import settings
+from django.db.models import Prefetch, Q
 from django.views.generic import DetailView, ListView, TemplateView
 
 from providers.models import Doctor, Hospital, Specialty, TreatmentPackage
+
+
+def _public_hospitals():
+    queryset = Hospital.objects.filter(is_active=True)
+    if not settings.DEBUG:
+        queryset = queryset.filter(is_sample=False)
+    return queryset
+
+
+def _public_doctors():
+    queryset = Doctor.objects.filter(is_active=True)
+    if not settings.DEBUG:
+        queryset = queryset.filter(is_sample=False).exclude(hospital__is_sample=True)
+    return queryset
+
+
+def _public_packages():
+    queryset = TreatmentPackage.objects.filter(is_active=True)
+    if not settings.DEBUG:
+        queryset = queryset.filter(hospital__is_sample=False)
+    return queryset
 
 
 class HomeView(TemplateView):
@@ -14,11 +36,9 @@ class HomeView(TemplateView):
         city = self.request.GET.get("city", "all")
 
         specialties = Specialty.objects.filter(is_active=True)
-        hospitals = Hospital.objects.filter(is_active=True).prefetch_related("specialties")
-        doctors = Doctor.objects.filter(is_active=True).select_related("specialty", "hospital")
-        packages = TreatmentPackage.objects.filter(is_active=True).select_related(
-            "hospital", "specialty"
-        )
+        hospitals = _public_hospitals().prefetch_related("specialties")
+        doctors = _public_doctors().select_related("specialty", "hospital")
+        packages = _public_packages().select_related("hospital", "specialty")
 
         if query:
             hospitals = hospitals.filter(
@@ -52,12 +72,7 @@ class HomeView(TemplateView):
             hospitals = hospitals.filter(city=city)
             doctors = doctors.filter(Q(city=city) | Q(hospital__city=city))
 
-        cities = (
-            Hospital.objects.filter(is_active=True)
-            .values_list("city", flat=True)
-            .distinct()
-            .order_by("city")
-        )
+        cities = _public_hospitals().values_list("city", flat=True).distinct().order_by("city")
 
         context.update(
             {
@@ -83,7 +98,7 @@ class HospitalListView(ListView):
     context_object_name = "hospitals"
 
     def get_queryset(self):
-        qs = Hospital.objects.filter(is_active=True).prefetch_related("specialties")
+        qs = _public_hospitals().prefetch_related("specialties")
         q = self.request.GET.get("q", "").strip()
         city = self.request.GET.get("city", "all")
         specialty = self.request.GET.get("specialty", "all")
@@ -98,12 +113,7 @@ class HospitalListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["all_specialties"] = Specialty.objects.filter(is_active=True)
-        context["cities"] = (
-            Hospital.objects.filter(is_active=True)
-            .values_list("city", flat=True)
-            .distinct()
-            .order_by("city")
-        )
+        context["cities"] = _public_hospitals().values_list("city", flat=True).distinct().order_by("city")
         context["filters"] = {
             "q": self.request.GET.get("q", ""),
             "specialty": self.request.GET.get("specialty", "all"),
@@ -120,8 +130,10 @@ class HospitalDetailView(DetailView):
     slug_url_kwarg = "slug"
 
     def get_queryset(self):
-        return Hospital.objects.filter(is_active=True).prefetch_related(
-            "specialties", "doctors", "packages"
+        return _public_hospitals().prefetch_related(
+            "specialties",
+            Prefetch("doctors", queryset=_public_doctors()),
+            Prefetch("packages", queryset=_public_packages()),
         )
 
 
@@ -131,7 +143,7 @@ class DoctorListView(ListView):
     context_object_name = "doctors"
 
     def get_queryset(self):
-        qs = Doctor.objects.filter(is_active=True).select_related("specialty", "hospital")
+        qs = _public_doctors().select_related("specialty", "hospital")
         q = self.request.GET.get("q", "").strip()
         city = self.request.GET.get("city", "all")
         specialty = self.request.GET.get("specialty", "all")
@@ -146,12 +158,7 @@ class DoctorListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["all_specialties"] = Specialty.objects.filter(is_active=True)
-        context["cities"] = (
-            Doctor.objects.filter(is_active=True)
-            .values_list("city", flat=True)
-            .distinct()
-            .order_by("city")
-        )
+        context["cities"] = _public_doctors().values_list("city", flat=True).distinct().order_by("city")
         context["filters"] = {
             "q": self.request.GET.get("q", ""),
             "specialty": self.request.GET.get("specialty", "all"),
@@ -168,4 +175,4 @@ class DoctorDetailView(DetailView):
     slug_url_kwarg = "slug"
 
     def get_queryset(self):
-        return Doctor.objects.filter(is_active=True).select_related("specialty", "hospital")
+        return _public_doctors().select_related("specialty", "hospital")

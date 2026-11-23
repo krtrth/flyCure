@@ -14,6 +14,13 @@
   <p>Confirm requests, review patients, and publish future availability.</p>
 </div>
 
+<div class="stat-grid" aria-label="Doctor desk overview">
+  <div class="stat-card"><span>Pending requests</span><strong>{{ requests|length }}</strong></div>
+  <div class="stat-card"><span>Upcoming</span><strong>{{ upcoming|length }}</strong></div>
+  <div class="stat-card"><span>Patients</span><strong>{{ past_patients|length }}</strong></div>
+  <div class="stat-card"><span>Future slots</span><strong>{{ slots|length }}</strong></div>
+</div>
+
 <article class="dash-panel" id="requests">
   <h2>Pending requests</h2>
   {% for item in requests %}

@@ -12,7 +12,13 @@
 
   <div class="detail-spread">
     <div class="detail-body">
-      <p class="eyebrow">{{ hospital.city }} · {{ hospital.accreditation }}</p>
+      <p class="eyebrow">{{ hospital.city }}{% if hospital.is_sample %} · Demo profile{% endif %}</p>
+      {% if hospital.is_sample %}
+        <div class="demo-notice" role="note">
+          <strong>Illustrative profile</strong>
+          <span>This is fictional demo content, not a real provider listing.</span>
+        </div>
+      {% endif %}
       <h1>{{ hospital.name }}</h1>
       <p class="detail-lede">{{ hospital.summary }}</p>
       {% if hospital.features %}
@@ -22,9 +28,6 @@
       <div class="tags" style="margin: 1.5rem 0 2.5rem;">
         {% for specialty in hospital.specialties.all %}
           <span>{{ specialty.name }}</span>
-        {% endfor %}
-        {% for tag in hospital.tag_list %}
-          <span>{{ tag }}</span>
         {% endfor %}
       </div>
 
@@ -54,9 +57,9 @@
           <div class="package-row" role="row">
             <span>{{ package.name }}</span>
             <span>{{ package.typical_stay }}</span>
-            <span>{{ package.approx_cost_label|default:"On request" }}</span>
+            <span>Confirm with provider</span>
             <a href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, quote for '|urlencode }}{{ package.name|urlencode }}." target="_blank" rel="noreferrer">
-              WhatsApp quote
+              Ask about options
             </a>
           </div>
         {% empty %}
@@ -67,8 +70,8 @@
 
     <aside class="detail-cta">
       <p class="eyebrow">Coordinator</p>
-      <h2>Request a private quote</h2>
-      <p>Share reports first. A coordinator will return two or three hospital-ready options on WhatsApp.</p>
+      <h2>Ask about this hospital</h2>
+      <p>Ask a coordinator about this profile. Provider suitability, availability, and any quotation need to be confirmed directly.</p>
       <div class="hero-actions" style="margin-top: 0;">
         <a
           class="btn btn-primary full-width"
@@ -78,7 +81,6 @@
         >
           WhatsApp quote
         </a>
-        <a class="btn btn-secondary full-width" href="{% url 'records:upload' %}">Upload reports</a>
       </div>
     </aside>
   </div>

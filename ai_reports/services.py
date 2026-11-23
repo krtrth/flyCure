@@ -6,8 +6,6 @@ so the patient flow works in development.
 
 from __future__ import annotations
 
-from django.conf import settings
-
 from records.models import MedicalReport
 
 from .models import ReportExplanation
@@ -50,12 +48,6 @@ def generate_explanation(report: MedicalReport) -> dict[str, str]:
 
     Hook point for a real LLM call when OPENAI_API_KEY is configured.
     """
-    if settings.OPENAI_API_KEY:
-        # Placeholder for a future OpenAI/Anthropic/Gemini integration.
-        # Keeping the stub path until API credentials and document parsing
-        # (PDF/OCR) are wired in a follow-up.
-        return _stub_explanation(report, model_name=settings.AI_REPORT_MODEL)
-
     return _stub_explanation(report, model_name="local-stub")
 
 

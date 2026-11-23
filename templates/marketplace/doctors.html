@@ -8,7 +8,7 @@
     <p class="eyebrow">Directory</p>
     <hr class="rule" />
     <h1>Specialists</h1>
-    <p>Compare doctors by specialty, city, and hospital affiliation.</p>
+    <p>Explore doctor profiles by specialty, city, and hospital affiliation.</p>
   </div>
 
   <form class="search-grid" method="get">
@@ -45,14 +45,18 @@
     {% for doctor in doctors %}
       <article class="doctor-card">
         <div class="doctor-avatar">{{ doctor.initials }}</div>
-        <p class="card-meta">{{ doctor.title }} · {{ doctor.city }}</p>
+        <p class="card-meta">{{ doctor.title }} · {{ doctor.city }}{% if doctor.is_sample %} · Demo profile{% endif %}</p>
         <h3><a href="{% url 'marketplace:doctor_detail' doctor.slug %}">{{ doctor.name }}</a></h3>
         <p>{{ doctor.years_experience }} years · {{ doctor.bio }}</p>
         <span>{{ doctor.languages }}</span>
+        {% if doctor.hospital %}
+          <p class="card-meta">{{ doctor.hospital.name }}</p>
+        {% endif %}
+        <a class="btn btn-small btn-secondary" href="{% url 'marketplace:doctor_detail' doctor.slug %}">View profile</a>
       </article>
     {% empty %}
       <div class="empty-state">
-        <p>No doctors found.</p>
+        <p>No doctors found. Try changing your search or clearing the filters.</p>
       </div>
     {% endfor %}
   </div>

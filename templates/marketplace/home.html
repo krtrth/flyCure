@@ -1,23 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="hero-bleed" aria-labelledby="hero-title" id="home">
-  <div class="hero-bleed-media">
-    <img
-      src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1800&q=80"
-      alt="Clinician reviewing notes in a calm hospital corridor"
-    />
-  </div>
-  <div class="hero-inner hero-copy">
+<section class="home-hero" aria-labelledby="hero-title" id="home">
+  <div class="home-hero-copy">
     <p class="eyebrow">Medical travel · India</p>
-    <h1 id="hero-title">Compare treatment in India with a dedicated coordinator.</h1>
+    <h1 id="hero-title">Explore care in India, with a clearer path forward.</h1>
     <p class="hero-subtitle">
-      Accredited hospitals, verified specialists, and private report review—then quotations on WhatsApp, never as public price lists.
+      Compare hospital and doctor information, explore treatment options, and talk with a care coordinator about what to do next.
     </p>
     <div class="hero-actions">
+      <a class="btn btn-primary" href="{% url 'marketplace:hospitals' %}">Explore hospitals</a>
       <a
-        class="btn btn-primary"
-        href="https://wa.me/{{ WHATSAPP_NUMBER }}?text=Hi%20FlyCure%2C%20I%20want%20a%20treatment%20quote%20for%20India."
+        class="btn btn-secondary"
+        href="https://wa.me/{{ WHATSAPP_NUMBER }}?text=Hi%20FlyCure%2C%20I%27d%20like%20to%20learn%20about%20treatment%20options%20in%20India."
         target="_blank"
         rel="noreferrer"
       >
@@ -25,28 +20,34 @@
           <path d="M8 10h8M8 14h5" stroke-linecap="round"/>
           <path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-3.3A8.5 8.5 0 1 1 21 12Z" stroke-linejoin="round"/>
         </svg>
-        Chat on WhatsApp
+        Talk to a coordinator
       </a>
-      <a class="btn btn-secondary" href="#treatments">Explore treatments</a>
-      {% if is_patient_user %}
-        <a class="btn btn-secondary" href="{% url 'records:upload' %}">Upload your prescription</a>
-      {% elif user.is_authenticated %}
-        <a class="btn btn-secondary" href="{{ portal_url }}">Go to {{ portal_label }}</a>
-      {% else %}
-        <a class="btn btn-secondary" href="{% url 'accounts:login' %}">Log in and upload your prescription</a>
-      {% endif %}
+    </div>
+    <p class="hero-note">Browsing is a starting point, not medical advice or a confirmed treatment plan.</p>
+  </div>
+  <div class="home-hero-visual">
+    <img
+      src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=85"
+      alt="A clinician holding a phone while wearing a stethoscope"
+    />
+    <div class="hero-caption">
+      <span class="hero-caption-mark" aria-hidden="true">F</span>
+      <div>
+        <strong>A human place to start</strong>
+        <span>Explore options, then ask questions at your pace.</span>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="search-overlap" aria-label="Marketplace search">
+<section class="search-overlap search-section" aria-label="Marketplace search">
   <form class="search-grid" method="get" action="{% url 'marketplace:home' %}">
     <label>
-      Search
+      <span>Search care options</span>
       <input id="site-search" name="q" type="search" value="{{ filters.q }}" placeholder="Treatment, hospital, doctor, city" />
     </label>
     <label>
-      Specialty
+      <span>Specialty</span>
       <select id="specialty-filter" name="specialty">
         <option value="all">All specialties</option>
         {% for specialty in all_specialties %}
@@ -57,7 +58,7 @@
       </select>
     </label>
     <label>
-      City
+      <span>City</span>
       <select id="city-filter" name="city">
         <option value="all">All cities</option>
         {% for city in cities %}
@@ -65,36 +66,13 @@
         {% endfor %}
       </select>
     </label>
-    <button class="btn btn-dark" type="submit">Search</button>
+    <button class="btn btn-primary" type="submit">Search options</button>
   </form>
 
-  <div class="inquiry-grid">
-    <div class="trust-strip" aria-label="FlyCure trust signals">
-      <span>JCI and NABH partner network</span>
-      <span>Private report vault</span>
-      <span>Plan within 24 hours</span>
-      <span>Medical visa guidance</span>
-    </div>
-    <form class="quick-plan mini-form" aria-label="Treatment preference form">
-      <p class="panel-kicker">Write to a coordinator</p>
-      <label>
-        Treatment need
-        <select id="hero-treatment">
-          {% for specialty in all_specialties %}
-            <option>{{ specialty.name }}</option>
-          {% empty %}
-            <option>Cardiac surgery</option>
-          {% endfor %}
-        </select>
-      </label>
-      <label>
-        Patient country
-        <input id="hero-country" type="text" placeholder="e.g. Kenya, UAE, UK" />
-      </label>
-      <a class="btn btn-primary full-width" id="hero-whatsapp" href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noreferrer">
-        Send on WhatsApp
-      </a>
-    </form>
+  <div class="trust-strip" aria-label="Using FlyCure">
+    <span>Explore hospitals and doctors</span>
+    <span>Compare information at your pace</span>
+    <span>Ask a coordinator when you’re ready</span>
   </div>
 </section>
 
@@ -102,9 +80,9 @@
   <div class="section-heading">
     <p class="eyebrow">Pathways</p>
     <hr class="rule" />
-    <h2 id="treatments-title">Treatments we coordinate across India</h2>
+    <h2 id="treatments-title">Explore care specialties in India</h2>
     <p>
-      Every category begins with a doctor review. Recommendations and quotations are shared on WhatsApp after your reports are assessed.
+      Browse specialties to find relevant providers. Treatment suitability and next steps require discussion with a qualified provider.
     </p>
   </div>
   <div class="treatment-grid">
@@ -128,7 +106,7 @@
     <hr class="rule" />
     <h2 id="hospitals-title">Places you can compare before you travel</h2>
     <p>
-      Browse partner and sample hospital profiles. Request a private WhatsApp quotation after report review.
+      Browse hospital profiles and compare the information currently available. Contact a coordinator to ask about next steps.
     </p>
   </div>
   <div class="photo-card-grid" id="hospital-list">
@@ -143,7 +121,7 @@
           <img src="{{ hospital.image_url }}" alt="" />
         {% endif %}
         <div class="photo-card-caption">
-          <p class="card-meta">{{ hospital.city }} · {{ hospital.accreditation }}</p>
+          <p class="card-meta">{{ hospital.city }}{% if hospital.is_sample %} · Demo profile{% endif %}</p>
           <h3>{{ hospital.name }}</h3>
         </div>
       </a>
@@ -159,14 +137,14 @@
   <div class="section-heading">
     <p class="eyebrow">Specialists</p>
     <hr class="rule" />
-    <h2 id="doctors-title">Doctors patients often shortlist</h2>
-    <p>Each portrait lists expertise, languages, hospital affiliation, and the next useful action.</p>
+    <h2 id="doctors-title">Doctor profiles to explore</h2>
+    <p>Review the profile details provided for each doctor and contact a coordinator with questions.</p>
   </div>
   <div class="doctor-grid">
     {% for doctor in doctors %}
       <article class="doctor-card" data-specialty="{{ doctor.specialty_code }}" data-city="{{ doctor.city }}">
         <div class="doctor-avatar">{{ doctor.initials }}</div>
-        <p class="card-meta">{{ doctor.title }} · {{ doctor.city }}</p>
+        <p class="card-meta">{{ doctor.title }} · {{ doctor.city }}{% if doctor.is_sample %} · Demo profile{% endif %}</p>
         <h3><a href="{% url 'marketplace:doctor_detail' doctor.slug %}">{{ doctor.name }}</a></h3>
         <p>{{ doctor.years_experience }} years · {{ doctor.bio }}</p>
         <span>{{ doctor.languages }}</span>
@@ -191,32 +169,32 @@
   <div class="section-heading align-left">
     <p class="eyebrow">Quotations</p>
     <hr class="rule" />
-    <h2 id="packages-title">Compare what a package usually includes</h2>
+    <h2 id="packages-title">Understand package information</h2>
     <p>
-      FlyCure shows typical stay and inclusions. Exact quotations are shared privately after doctor review and hospital confirmation.
+      Package details may be indicative. Confirm services, length of stay, and pricing directly with the provider.
     </p>
   </div>
   <div class="package-table" role="table" aria-label="Sample treatment package comparison">
     <div class="package-row table-head" role="row">
       <span role="columnheader">Package</span>
-      <span role="columnheader">Sample provider</span>
+      <span role="columnheader">Provider</span>
       <span role="columnheader">Typical stay</span>
-      <span role="columnheader">Approx. range</span>
+      <span role="columnheader">Pricing</span>
       <span role="columnheader">Quote</span>
     </div>
     {% for package in packages %}
       <div class="package-row" role="row" data-specialty="{{ package.specialty_code }}">
         <span role="cell">{{ package.name }}</span>
-        <span role="cell">{{ package.hospital.name }}</span>
+        <span role="cell">{{ package.hospital.name }}{% if package.hospital.is_sample %} · Demo{% endif %}</span>
         <span role="cell">{{ package.typical_stay }}</span>
-        <span role="cell">{{ package.approx_cost_label|default:"On request" }}</span>
+        <span role="cell">Confirm with provider</span>
         <a
           role="cell"
           href="https://wa.me/{{ WHATSAPP_NUMBER }}?text={{ 'Hi FlyCure, I need a quote for '|urlencode }}{{ package.name|urlencode }}."
           target="_blank"
           rel="noreferrer"
         >
-          WhatsApp quote
+          Ask about options
         </a>
       </div>
     {% empty %}
@@ -227,12 +205,12 @@
   </div>
   <div class="included-grid">
     <div>
-      <h3>Quote may include</h3>
-      <p>Doctor consultation, procedure estimate, standard hospital stay, routine diagnostics, airport pickup, interpreter support, and coordinator assistance.</p>
+      <h3>Ask what is included</h3>
+      <p>Package scope varies. Ask the provider to confirm services, length of stay, exclusions, currency, and how long a quotation remains valid.</p>
     </div>
     <div>
-      <h3>Quote may exclude</h3>
-      <p>Complications, extended stay, donor-related costs, premium rooms, international flights, personal expenses, and major plan changes after arrival.</p>
+      <h3>Confirm before making plans</h3>
+      <p>Do not rely on an estimate as a final price or treatment recommendation. A provider must review the details and confirm any offer.</p>
     </div>
   </div>
 </section>
@@ -241,15 +219,15 @@
   <div class="section-heading">
     <p class="eyebrow">The journey</p>
     <hr class="rule" />
-    <h2 id="journey-title">From first message to recovery at home</h2>
+    <h2 id="journey-title">A practical path to explore options</h2>
   </div>
   <div class="journey-grid">
-    <article><span>01</span><h3>Send reports</h3><p>Create an account, upload diagnosis files, and keep them private.</p></article>
-    <article><span>02</span><h3>Plain-language draft</h3><p>Read an AI draft explanation, then confirm next steps with a coordinator.</p></article>
-    <article><span>03</span><h3>Compare options</h3><p>FlyCure shares suitable hospital and doctor choices after review.</p></article>
-    <article><span>04</span><h3>Confirm quote</h3><p>Quotation, inclusions, stay plan, and next steps are shared privately.</p></article>
-    <article><span>05</span><h3>Travel support</h3><p>Medical visa guidance, airport pickup, hotel suggestions, and local coordination.</p></article>
-    <article><span>06</span><h3>Follow-up</h3><p>Post-discharge instructions and follow-up scheduling after you return home.</p></article>
+    <article><span>01</span><h3>Explore</h3><p>Browse treatment specialties, hospitals, and doctor profiles.</p></article>
+    <article><span>02</span><h3>Compare</h3><p>Review the information available and note what you want to ask.</p></article>
+    <article><span>03</span><h3>Ask questions</h3><p>Start a WhatsApp conversation with a non-sensitive message.</p></article>
+    <article><span>04</span><h3>Share if you choose</h3><p>Use your patient account to manage reports. Avoid sharing sensitive details in public messages.</p></article>
+    <article><span>05</span><h3>Confirm directly</h3><p>Discuss suitability, availability, pricing, and next steps with the provider.</p></article>
+    <article><span>06</span><h3>Decide at your pace</h3><p>Browsing or making an enquiry does not commit you to treatment.</p></article>
   </div>
 </section>
 
@@ -258,7 +236,7 @@
     <p class="eyebrow">Coordinator</p>
     <h2 id="contact-title">Ready to compare treatment options in India?</h2>
     <p>
-      Share your treatment need, country, preferred city, and available reports. A coordinator will guide the next step on WhatsApp.
+      Start a conversation when you are ready. Share only the information you choose to provide.
     </p>
     <div class="hero-actions">
       <a
@@ -269,7 +247,7 @@
       >
         Start WhatsApp chat
       </a>
-      {% if is_patient_user %}
+      {% if is_patient_user and REPORT_UPLOADS_ENABLED %}
         <a class="btn btn-secondary" href="{% url 'records:upload' %}">Upload medical reports</a>
       {% elif user.is_authenticated %}
         <a class="btn btn-secondary" href="{{ portal_url }}">Go to {{ portal_label }}</a>

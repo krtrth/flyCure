@@ -11,7 +11,13 @@
   <p class="eyebrow">Your file</p>
   <hr class="rule" />
   <h1>Hello{% if user.first_name %}, {{ user.first_name }}{% endif %}</h1>
-  <p>Reports, appointments, suggested tests, and past procedures stay on this private desk.</p>
+  <p>Review your reports, appointment requests, suggested tests, and past procedures.</p>
+</div>
+
+<div class="stat-grid" aria-label="Account overview">
+  <div class="stat-card"><span>Reports</span><strong>{{ reports|length }}</strong></div>
+  <div class="stat-card"><span>Appointments</span><strong>{{ appointments|length }}</strong></div>
+  <div class="stat-card"><span>Suggested tests</span><strong>{{ suggested_tests|length }}</strong></div>
 </div>
 
 <article class="dash-panel" id="profile">
@@ -47,8 +53,13 @@
   {% endfor %}
 </article>
 
-<article class="dash-panel" id="prescriptions">
-  <h2>Prescriptions</h2>
+<article class="dash-panel" id="reports">
+  <div class="dash-panel-head">
+    <h2>Medical reports</h2>
+    {% if REPORT_UPLOADS_ENABLED %}
+      <a class="btn btn-small btn-secondary" href="{% url 'records:upload' %}">Upload a report</a>
+    {% endif %}
+  </div>
   <div class="records-list">
     {% for report in reports %}
       <article class="record-card">
@@ -60,7 +71,11 @@
         <a class="btn btn-small" href="{% url 'records:report_detail' report.pk %}">Open</a>
       </article>
     {% empty %}
-      <p class="empty-state">No reports yet. Upload a prescription to start your file.</p>
+      {% if REPORT_UPLOADS_ENABLED %}
+        <p class="empty-state">No reports yet. Upload a prescription to start your file.</p>
+      {% else %}
+        <p class="empty-state">Report uploads are temporarily unavailable.</p>
+      {% endif %}
     {% endfor %}
   </div>
 </article>

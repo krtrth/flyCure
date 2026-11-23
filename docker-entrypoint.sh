@@ -35,8 +35,12 @@ else:
 PY
 
 python manage.py migrate --noinput
-# Safe to re-run: skips hospitals/doctors if the catalog already has rows.
-python manage.py seed_marketplace
+if [ "$(python -c 'from config.settings import DEBUG; print(DEBUG)')" = "True" ]; then
+    # Safe to re-run locally: skips hospitals/doctors if the catalog already has rows.
+    python manage.py seed_marketplace
+else
+    echo "Skipping sample marketplace data because DEBUG is disabled."
+fi
 
 python - <<'PY'
 import os

@@ -11,7 +11,13 @@
   <p class="eyebrow">Hospital desk</p>
   <hr class="rule" />
   <h1>{{ hospital.name }}</h1>
-  <p>Update the public page, doctors, approximate packages, and review appointments.</p>
+  <p>Update the public page, doctor profiles, package details, and review appointment requests.</p>
+</div>
+
+<div class="stat-grid" aria-label="Hospital desk overview">
+  <div class="stat-card"><span>Doctors</span><strong>{{ doctors|length }}</strong></div>
+  <div class="stat-card"><span>Packages</span><strong>{{ packages|length }}</strong></div>
+  <div class="stat-card"><span>Appointments</span><strong>{{ appointments|length }}</strong></div>
 </div>
 
 <article class="dash-panel" id="doctors">

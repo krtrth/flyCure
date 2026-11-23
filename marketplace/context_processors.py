@@ -22,6 +22,7 @@ def site_settings(request):
         portal_url = reverse(signed_in_home(user))
     return {
         "WHATSAPP_NUMBER": settings.WHATSAPP_NUMBER,
+        "REPORT_UPLOADS_ENABLED": settings.REPORT_UPLOADS_ENABLED,
         "SITE_NAME": "FlyCure",
         "portal_label": portal_label,
         "portal_url": portal_url,
